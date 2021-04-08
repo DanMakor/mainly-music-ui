@@ -5,9 +5,15 @@ $primary: map-get($mm-app-theme, primary);
 
 .save-bar {
     position: fixed;
+    color: white;
     bottom: 0;
+    right: 0;
     padding: 1rem 4rem;
-    width: 100%; 
+    width: calc(100% - 68px); 
     z-index: 10;
     background-color: mat-color($primary);
+}
+
+span {
+    font-size: 11px;
 }

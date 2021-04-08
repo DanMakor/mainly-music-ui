@@ -11,6 +11,7 @@
     </div>
 </div>
 
-<div class="save-bar">
-    <button mat-button mat-raised-button color="accent" (click)="saveClicked$.next()">Save Family</button>
+<div class="save-bar" fxLayout="row" fxLayoutGap="3rem">
+    <button fxFlex="130px" mat-button mat-raised-button color="accent" class="mr-2" (click)="saveClicked$.next()">Save Family</button>
+    <span>The information provided will only be used by Ginninderra Christian Church and will not be forwarded to any third party. We may also use this information to inform you of any children or family related activities or events.</span>
 </div>

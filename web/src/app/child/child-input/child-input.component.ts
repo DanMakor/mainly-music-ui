@@ -29,7 +29,8 @@ export class ChildInputComponent implements OnInit, OnDestroy,ControlValueAccess
   public childForm = this.fb.group({
     firstName: ["", Validators.required],
     lastName: ["", Validators.required],
-    dateOfBirth: ["", Validators.required]
+    dateOfBirth: ["", Validators.required],
+    hasBowl: [true, Validators.required]
   });
   
   ngOnInit(): void {
@@ -45,7 +46,7 @@ export class ChildInputComponent implements OnInit, OnDestroy,ControlValueAccess
   validate = (): ValidatorFn => (_: AbstractControl) => this.childForm.errors;
 
   writeValue(obj: any): void {
-    this.childForm.reset(obj ? obj : {}, { emitEvent: false });
+    this.childForm.reset(obj ? obj : { hasBowl: true }, { emitEvent: false });
   }
 
   registerOnChange(fn: any): void {
