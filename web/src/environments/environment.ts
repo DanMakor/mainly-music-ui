@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  baseApiUrl: "https://mainly-music.herokuapp.com/",
-  api: "https://mainly-music.herokuapp.com/api"
+  baseApiUrl: "http//localhost:3000",
+  api: "http://localhost:3000"
 };
 
 /*
