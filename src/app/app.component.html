@@ -1,0 +1,13 @@
+<mat-sidenav-container class="mh-100">
+    <mat-sidenav mode="side" opened>
+        <a routerLink=""><fa-icon [icon]="['fas', 'home']"></fa-icon></a>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mm-session-toolbar></mm-session-toolbar>  
+        <div class="p-5">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!-- <router-outlet></router-outlet> -->

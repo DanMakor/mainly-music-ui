@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+    <h4 *ngFor="let paragraph of data.paragraphs">
+        {{ paragraph }}
+    </h4>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="false">No Thanks</button>
+  <button mat-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
+</div>

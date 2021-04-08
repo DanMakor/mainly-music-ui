@@ -1,0 +1,19 @@
+<mat-form-field appearance="fill">
+    <mat-label>Family</mat-label>
+    <input type="text"
+           placeholder="Filter a family"
+           aria-label="Family filter"
+           matInput
+           [formControl]="familyInput"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option *ngFor="let option of filteredFamilies$ | async" [value]="option">
+        <span class="mr-2" *ngFor="let familyMember of option.value">
+            <fa-icon *ngIf="familyMember.type === personType.child" [icon]="['fas', 'baby']" class="mr-1"></fa-icon>
+            <fa-icon *ngIf="familyMember.type === personType.guardian" [icon]="['fas', 'user']" class="mr-1"></fa-icon>
+            {{ familyMember.name }}
+        </span>
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error>You must select a related family</mat-error>
+</mat-form-field>

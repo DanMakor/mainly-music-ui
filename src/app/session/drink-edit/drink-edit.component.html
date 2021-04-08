@@ -1,0 +1,5 @@
+<h1>{{ title$ | async }}</h1>
+
+<mm-drink-input [formControl]="drink"></mm-drink-input>
+
+<button mat-raised-button color="accent" (click)="saveDrinkClicked$.next()">Save Drink</button>

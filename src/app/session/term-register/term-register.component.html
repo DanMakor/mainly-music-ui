@@ -1,0 +1,14 @@
+<button (click)="backClicked$.next()" mat-raised-button>Back</button>
+
+<h1 class="mt-2">{{ registrationId ? 'Update Registration' : 'Register' }}</h1>
+
+<div [formGroup]="registration">
+    <mm-family-select [persons]="persons$ | async" formControlName="familyId"></mm-family-select>
+    <mat-slide-toggle formControlName="paid">Paid</mat-slide-toggle>
+    <mat-form-field class="mt-2" appearance="fill">
+        <mat-label>Notes</mat-label>
+        <textarea formControlName="notes" rows="3" matInput placeholder="Ex. Will pay by cash on the day..."></textarea>
+    </mat-form-field>    
+</div>
+
+<button (click)="saveClicked$.next()" mat-raised-button color="accent" class="mt-2">Save</button>

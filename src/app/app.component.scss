@@ -1,0 +1,25 @@
+@import '~@angular/material/theming';
+@import '../theme.scss';
+
+$primary: map-get($mm-app-theme, primary);
+$foreground: map-get($mm-app-theme, foreground);
+
+mat-sidenav {
+    background-color: mat-color($primary) !important;
+    color: white !important;
+}
+
+a {
+    display: block;
+    padding: 1.5rem;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: mat-color($primary, 300)
+}
+
+.mh-100 {
+    min-height: 100vh;
+}

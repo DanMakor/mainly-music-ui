@@ -1,0 +1,21 @@
+<form [formGroup]="childForm">
+    <mat-form-field appearance="fill">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" placeholder="Ex. John">
+        <mat-error>First Name is required</mat-error>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" placeholder="Ex. Garrard" >
+        <mat-error>Last Name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput formControlName="dateOfBirth" [matDatepicker]="picker">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error> Date of Birth is required</mat-error>
+    </mat-form-field>
+</form>

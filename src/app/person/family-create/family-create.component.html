@@ -1,0 +1,16 @@
+
+<div fxLayout="row">
+    <div fxFlex="30" class="p-5">
+        <h2>Add Children</h2>
+        <mm-child-input [formControl]="child"></mm-child-input>
+    </div>
+    <mat-divider [vertical]="true"></mat-divider>
+    <div fxFlex="70" class="p-5">
+        <h2>Add Carer</h2>
+        <mm-guardian-input [formControl]="guardian"></mm-guardian-input>   
+    </div>
+</div>
+
+<div class="save-bar">
+    <button mat-button mat-raised-button color="accent" (click)="saveClicked$.next()">Save Family</button>
+</div>

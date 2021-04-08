@@ -1,0 +1,38 @@
+<form class="mb-2" [formGroup]="drinkForm">
+    <div>
+        <mat-button-toggle-group formControlName="type" aria-label="Select a drink type">
+            <mat-button-toggle [value]="drinkType.coffee">Coffee</mat-button-toggle>
+            <mat-button-toggle [value]="drinkType.tea">Tea</mat-button-toggle>
+            <mat-button-toggle [value]="drinkType.hotChoc">Hot Chocolate</mat-button-toggle>
+            <mat-button-toggle [value]="drinkType.water">Water</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+
+    <ng-container *ngIf="(drinks$ | async) as filteredDrinks">
+        <div *ngIf="filteredDrinks.length" class="mt-2">
+            <mat-button-toggle-group formControlName="name" aria-label="Select a drink">
+                <mat-button-toggle [value]="drink" *ngFor="let drink of filteredDrinks">{{ drink }}</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </ng-container>
+
+    <div fxLayout="row">
+        <ng-container *ngIf="(milks$ | async) as milks">
+            <div class="mr-2 mt-2" *ngIf="milks.length">
+                <h4>Milk</h4>
+                <mat-button-toggle-group formControlName="milk" aria-label="Select a milk">
+                    <mat-button-toggle [value]="milk" *ngFor="let milk of milks">{{ milk }}</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+        </ng-container>
+
+    <ng-container *ngIf="(strengths$ | async) as strengths">
+            <div class="mt-2" *ngIf="strengths.length">
+                <h4>Strength</h4>
+                <mat-button-toggle-group formControlName="strength" aria-label="Select a milk">
+                    <mat-button-toggle [value]="strength" *ngFor="let strength of strengths">{{ strength }}</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+        </ng-container>
+    </div>
+</form>

@@ -1,0 +1,7 @@
+
+<div fxLayout="row wrap" fxLayoutGap="0.5rem">
+    <div class="mb-3" fxFlex="0 1 calc(25% - 0.5rem)" *ngFor="let entry of drinkNamesAndCount$ | async">
+        <h2><fa-icon [icon]="['fas', 'coffee']" class="mr-2"></fa-icon>{{ entry[0] }}</h2>
+        <h1>{{ entry[1] }}</h1>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<ng-container *ngIf="{ birthdays: birthdays$ | async, certificates: certificates$ | async } as state">
+    <ng-container *ngIf="state.birthdays?.length">
+        <h2>
+            <fa-icon [icon]="['fas', 'birthday-cake']" class="mr-1"></fa-icon>
+            Birthdays
+        </h2>
+        <p class="ml-1" *ngFor="let person of state.birthdays">
+            {{ person.firstName }} {{ person.lastName }}
+        </p>
+    </ng-container>
+    <ng-container *ngIf="state.certificates?.length">
+        <h2 class="mt-4">
+            <fa-icon [icon]="['fas', 'award']" class="mr-1"></fa-icon>
+            Certificates
+        </h2>
+        <p class="ml-1" *ngFor="let person of state.certificates">
+            {{ person.firstName }} {{ person.lastName }}
+        </p>
+    </ng-container>
+</ng-container>

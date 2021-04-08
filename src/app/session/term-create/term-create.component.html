@@ -1,0 +1,32 @@
+<div class="p-5" >
+    <h1>Add Term</h1>
+    <div fxLayout="row" fxLayoutGap="1rem" [formGroup]="term">
+        <mat-form-field fxFlex="50" appearance="fill">
+            <mat-label>Term</mat-label>
+            <mat-select formControlName="termNumber">
+                <mat-option [value]="1">1</mat-option>
+                <mat-option [value]="2">2</mat-option>
+                <mat-option [value]="3">3</mat-option>
+                <mat-option [value]="4">4</mat-option>
+            </mat-select>
+            <mat-error>You must select a term</mat-error>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="50" appearance="fill">
+            <mat-label>Year</mat-label>
+            <input type="number"
+                placeholder="Ex. 2020"
+                aria-label="Year"
+                matInput
+                formControlName="year"
+                [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let year of years" [value]="year">
+                {{ year }}
+            </mat-option>
+            </mat-autocomplete>
+            <mat-error>You must select a year</mat-error>
+        </mat-form-field>
+    </div>
+    <button (click)="saveClicked$.next()" mat-raised-button color="accent">Save</button>
+</div>

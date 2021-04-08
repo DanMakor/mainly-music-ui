@@ -1,0 +1,6 @@
+
+<mm-family-select [persons]="persons$ | async" [formControl]="familyId"></mm-family-select>
+
+<mm-child-input [formControl]="child"></mm-child-input>
+
+<button mat-raised-button color="primary" (click)="saveClicked$.next()">Save</button>

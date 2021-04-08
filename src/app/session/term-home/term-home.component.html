@@ -1,0 +1,8 @@
+
+<button mat-raised-button routerLink="./create" color="accent">Create Term</button>
+
+<mat-nav-list class="mt-2">
+    <a *ngFor="let term of terms$ | async" mat-list-item [routerLink]="term._id"> 
+        Term {{ term.termNumber }},  {{ term.year }}
+    </a>
+</mat-nav-list>

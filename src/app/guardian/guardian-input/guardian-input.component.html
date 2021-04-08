@@ -1,0 +1,58 @@
+<form [formGroup]="guardianForm">
+    <mat-form-field appearance="fill">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" placeholder="Ex. John">
+        <mat-error>First Name is required</mat-error>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" placeholder="Ex. Garrard" >
+        <mat-error>Last Name is required</mat-error>
+    </mat-form-field>
+
+    <mm-drink-input formControlName="drink"></mm-drink-input>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Relationship to Child</mat-label>
+        <input matInput formControlName="relationshipToChild" placeholder="Ex. Mother">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Address</mat-label>
+        <input matInput formControlName="address" placeholder="Ex. 20 Wakool Circuit Kaleen, ACT, 2617">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone" placeholder="Ex. 0439278728">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Ex. danielmcauliffe@outlook.com">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Affiliated Church</mat-label>
+        <input matInput formControlName="church" placeholder="Ex. Ginninderra Christian Church">
+    </mat-form-field>
+
+    <mm-drink-input formControlName="drink"></mm-drink-input>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Extra Information</mat-label>
+        <textarea matInput formControlName="information" placeholder="Ex. Allergic to Peanuts"></textarea>
+    </mat-form-field>
+
+    <h2>Emergency Contact</h2>
+    <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="emergencyContactName" placeholder="Ex. Linda Garrard">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="emergencyContactPhone" placeholder="Ex. 04278728838">
+    </mat-form-field>
+</form>
