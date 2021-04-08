@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subject } from 'rxjs';
 import { debounceTime, exhaustMap, filter, map, startWith, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { PersonService } from 'src/app/person/person.service';
@@ -27,10 +27,10 @@ export class ChildCreateComponent implements OnInit {
       catchAndContinue()
     )),
     filter(({ isError }) => !isError),
-    tap(_ => this.router.navigate(['../']))
+    tap(_ => this.router.navigate(['../'], { relativeTo: this.route }))
   )
 
-  constructor(private personService: PersonService, private router: Router) { }
+  constructor(private personService: PersonService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.saveChild$.pipe(takeUntil(this.onDestroy$)).subscribe();

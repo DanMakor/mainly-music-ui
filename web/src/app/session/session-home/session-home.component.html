@@ -1,6 +1,6 @@
 <mat-form-field>
     <mat-label>Type in your name to find your family</mat-label>
-    <input #search (input)="searchChanged$.next(search.value)" matInput placeholder="Search">
+    <input #search [formControl]="input" matInput placeholder="Search">
 </mat-form-field>
 
 <div fxLayout="row" fxLayoutAlign="space-between">

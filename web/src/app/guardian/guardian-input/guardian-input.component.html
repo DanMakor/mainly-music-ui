@@ -53,4 +53,11 @@
         <mat-label>Phone</mat-label>
         <input matInput formControlName="emergencyContactPhone" placeholder="Ex. 04278728838">
     </mat-form-field>
+
+    <h2>Photographs</h2>
+    <p>Sometimes we take photos of the fun and action to help promote mainly music. If you have concerns about this please speak to a team member. Otherwise, please confirm below to consent or decline to your child/children appearing in photographs to promote mainly music. Please select 'Yes' if you consent to your child appearing in photographs and 'No' if you do not.</p>
+    <mat-button-toggle-group formControlName="allowPhotographs" aria-label="Allow photographs">
+        <mat-button-toggle [value]="true">Yes</mat-button-toggle>
+        <mat-button-toggle [value]="false">No</mat-button-toggle>
+    </mat-button-toggle-group>
 </form>

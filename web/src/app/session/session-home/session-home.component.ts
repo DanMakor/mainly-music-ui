@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +13,7 @@ import { personType } from 'src/app/person/person-type';
 import { PersonService } from 'src/app/person/person.service';
 import { catchAndContinue } from 'src/app/shared/catch-and-continue';
 import { ConfirmationModalComponent } from 'src/app/shared/confirmation.modal/confirmation.modal.component';
+import { SearchService } from '../search.service';
 import { SessionService } from '../session.service';
 
 @Component({
@@ -36,10 +38,15 @@ export class SessionHomeComponent implements OnInit {
   private readonly termId = this.route.snapshot.paramMap.get('termId') as string;
   public readonly personType = personType;
 
-  public searchChanged$ = new Subject<string>();
-  public searchChangedWithDebounce$ = this.searchChanged$.pipe(
-    debounceTime(150)
-  )
+  public input = new FormControl();
+  private setSearchString$ =  this.input.valueChanges.pipe(
+    tap(searchString => this.searchService.setSearchString(searchString))
+  );
+
+  private setSearchInput$ = this.searchService.searchString$.pipe(
+    take(1),
+    tap(searchString => this.input.setValue(searchString, { emitEvent: false }))
+  );
 
   private currentSessionBirthdaysMap$ = this.sessionService.currentSessionBirthdaysMap$.pipe(
     filter(({ sessionId }) => sessionId === this.sessionId),
@@ -75,8 +82,12 @@ export class SessionHomeComponent implements OnInit {
       )}), {})),
   );
 
-  public filteredFamilies$ = combineLatest([this.currentSessionFamilies$, this.searchChangedWithDebounce$.pipe(startWith(""))]).pipe(
+  public filteredFamilies$ = combineLatest([this.currentSessionFamilies$, this.searchService.searchString$]).pipe(
     map(([familyMap, filterString]) => {
+      if (!filterString) {
+        return [];
+      }
+
       const filterStrings = filterString.split(' ');
       return Object.values(familyMap)
         .filter(persons => persons.some(person => this.personMatchesFilterString(filterStrings, person)))
@@ -187,7 +198,8 @@ export class SessionHomeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private searchService: SearchService
   ) { }
 
   ngOnInit(): void {
@@ -196,10 +208,13 @@ export class SessionHomeComponent implements OnInit {
       this.checkOut$,
       this.updateHasBowl$,
       this.navigate$,
+      this.setSearchString$,
       this.showHasBirthdayAndHasCertificateToast$,
       this.showHasBirthdayToast$,
       this.showHasCertificateToast$
     ).pipe(takeUntil(this.onDestroy$)).subscribe();
+
+    this.setSearchInput$.subscribe();
   }
 
   ngOnDestroy(): void {

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { tap, filter, exhaustMap, takeUntil } from 'rxjs/operators';
 import { PersonService } from 'src/app/person/person.service';
@@ -31,10 +31,10 @@ export class GuardianCreateComponent implements OnInit {
       catchAndContinue()
     )),
     filter(({ isError }) => !isError),
-    tap(_ => this.router.navigate(['../']))
+    tap(_ => this.router.navigate(['../'], { relativeTo: this.route }))
   )
 
-  constructor(private personService: PersonService, private router: Router, private fb: FormBuilder) { }
+  constructor(private personService: PersonService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.saveGuardian$.pipe(takeUntil(this.onDestroy$)).subscribe();
