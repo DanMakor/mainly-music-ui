@@ -55,11 +55,9 @@ export class SessionService {
         addDays(currentSession.date, -14) :
         sortedSessions[index - 1].date;
 
-      console.log(previousSessionDate);
       const birthdaysMap = children.reduce((acc, child) => ({ ...acc, [child._id]: birthdayIsBetweenSessions(child.dateOfBirth, currentSession.date, previousSessionDate)}), {} as { [key: string]: boolean });
       return { sessionId: currentSession._id, birthdaysMap };
     }),
-    tap(({ birthdaysMap }) => { console.log(birthdaysMap) }),
     share()
   );
 
