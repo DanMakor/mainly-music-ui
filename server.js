@@ -17,7 +17,7 @@ app.use((req, res, next) => {
       // Invalid ip
       console.log("Bad IP: " + req.socket.remoteAddress);
       const err = new Error("Bad IP: " + req.socket.remoteAddress);
-      next({ validIps, remoteAddress: req.socket.remoteAddress });
+      next({ validIps, remoteAddress: req.socket.remoteAddress, request: req.headers['x-forwarded-for'] });
   }
 });
 app.use(express.static(path.join(root, 'dist/')));
