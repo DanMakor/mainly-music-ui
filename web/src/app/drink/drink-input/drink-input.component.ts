@@ -38,15 +38,16 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
     { name: "Latte", type: drinkType.coffee },
     { name: "Long Black", type: drinkType.coffee },
     { name: "Short Black", type: drinkType.coffee },
-    { name: "English Breakfast", type: drinkType.tea },
+    { name: "Dilmah (Black Tea)", type: drinkType.tea },
     { name: "Rooibos", type: drinkType.tea },
     { name: "Hot", type: drinkType.water },
     { name: "Cold", type: drinkType.water }
   ]
 
   public readonly milkTypes = [
-    "Full Cream",
-    "Soy"
+    { name: "Full Cream", type: drinkType.coffee },
+    { name: "Soy", type: drinkType.coffee },
+    { name: "No Milk", type: drinkType.tea },
   ];
 
   public readonly strengths = [
@@ -78,7 +79,10 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
     merge((this.drinkForm.get('type') as FormControl).valueChanges, this.writeType$),
     merge((this.drinkForm.get('name') as FormControl).valueChanges, this.writeName$)
   ]).pipe(
-    map(([type, name]) => type !== drinkType.water && type !== undefined && (name !== "Long Black" && name !== "Short Black") ? this.milkTypes : []),
+    map(([type, name]) => type !== drinkType.water && type !== undefined && (name !== "Long Black" && name !== "Short Black") 
+      ? this.milkTypes.filter(mt => mt.type === drinkType.tea ? mt.type === type : true).map(({ name }) => name) 
+      : []
+    ),
     tap(milks => !milks.length && this.drinkForm.get('milk')?.reset(this.milkTypes[0], { emitEvent: false }))
   );
 

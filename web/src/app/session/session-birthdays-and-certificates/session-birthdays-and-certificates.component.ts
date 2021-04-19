@@ -22,7 +22,7 @@ export class SessionBirthdaysAndCertificatesComponent implements OnInit {
   ) { }
 
   public certificates$ = combineLatest([this.sessionService.attendanceMap$, this.personService.persons$, this.sessionService.currentSession$]).pipe(
-    map(([attendanceMap, persons, currentSession]) => persons.filter(p => attendanceMap[p._id]?.length === 1 && currentSession.personIds.includes(p._id)))
+    map(([attendanceMap, persons, currentSession]) => persons.filter(p => attendanceMap[p._id]?.length === 10 && currentSession.personIds.includes(p._id)))
   );
 
   public birthdays$ = combineLatest([this.sessionService.currentSessionBirthdaysMap$, this.personService.persons$, this.sessionService.currentSession$]).pipe(
