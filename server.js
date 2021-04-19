@@ -7,17 +7,16 @@ const app = express();
 
 app.use((req, res, next) => {
   let validIps = process.env.IPS?.split(',') || ['::12', '127.0.0.1']; // Put your IP whitelist in this array
-  console.log(validIps);
-  if(validIps.includes(req.socket.remoteAddress)){
+  let clientIp = req.headers['x-forwarded-for'];
+  if(validIps.includes(clientIp)) {
       // IP is ok, so go on
       console.log("IP ok");
       next();
   }
   else{
       // Invalid ip
-      console.log("Bad IP: " + req.socket.remoteAddress);
-      const err = new Error("Bad IP: " + req.socket.remoteAddress);
-      next({ validIps, remoteAddress: req.socket.remoteAddress, request: req.headers['x-forwarded-for'] });
+      console.log("Bad IP: " + clientIp);
+      next(clientIp);
   }
 });
 app.use(express.static(path.join(root, 'dist/')));
