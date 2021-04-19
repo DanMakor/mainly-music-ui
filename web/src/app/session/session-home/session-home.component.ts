@@ -30,6 +30,7 @@ export class SessionHomeComponent implements OnInit {
   addGuardianClickedUrl$ = this.addGuardianClicked$.pipe(mapTo('createGuardian'))
   public addChildClicked$ = new Subject();
   addChildClickedUrl$ = this.addChildClicked$.pipe(mapTo('createChild'))
+  public checkInFamilyClicked$ = new Subject();
 
   public hasBowlNoSubject$ = new Subject<string>();
   public hasBowlYesSubject$ = new Subject<string>();
@@ -38,12 +39,20 @@ export class SessionHomeComponent implements OnInit {
   private readonly termId = this.route.snapshot.paramMap.get('termId') as string;
   public readonly personType = personType;
 
+  private updateSearchInput$ = this.checkInFamilyClicked$.pipe(
+    tap(_ => this.input.setValue(""))
+  );
+
   public input = new FormControl();
-  private setSearchString$ =  this.input.valueChanges.pipe(
+  private setSearchString$ =  merge(
+    this.input.valueChanges
+  ).pipe(
     tap(searchString => this.searchService.setSearchString(searchString))
   );
 
-  private setSearchInput$ = this.searchService.searchString$.pipe(
+  private setSearchInput$ = merge(
+    this.searchService.searchString$
+ ).pipe(
     take(1),
     tap(searchString => this.input.setValue(searchString, { emitEvent: false }))
   );
@@ -209,6 +218,7 @@ export class SessionHomeComponent implements OnInit {
       this.updateHasBowl$,
       this.navigate$,
       this.setSearchString$,
+      this.updateSearchInput$,
       this.showHasBirthdayAndHasCertificateToast$,
       this.showHasBirthdayToast$,
       this.showHasCertificateToast$

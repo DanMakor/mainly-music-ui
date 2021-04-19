@@ -13,10 +13,12 @@ import { PersonModule } from './person/person.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ErrorInterceptor } from './core/error.interceptor';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { LoadingInterceptor } from './core/loading.interceptor';
 
 const socketIoConfig: SocketIoConfig = { url: environment.baseApiUrl, options: {} };
 const AU_DATE_FORMAT = {
@@ -46,6 +48,7 @@ const AU_DATE_FORMAT = {
     BrowserAnimationsModule,
     FlexLayoutModule,
     MatSidenavModule,
+    MatProgressBarModule,
     MatSnackBarModule,
     SocketIoModule.forRoot(socketIoConfig)
   ],
@@ -53,6 +56,11 @@ const AU_DATE_FORMAT = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
       multi: true
     },
     {

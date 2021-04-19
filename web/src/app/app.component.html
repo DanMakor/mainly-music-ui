@@ -4,10 +4,9 @@
     </mat-sidenav>
     <mat-sidenav-content>
         <mm-session-toolbar></mm-session-toolbar>  
+        <mat-progress-bar *ngIf="showProgressBar$ | async" mode="indeterminate" color="accent"></mat-progress-bar>
         <div class="p-5">
             <router-outlet></router-outlet>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>
-
-<!-- <router-outlet></router-outlet> -->
