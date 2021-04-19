@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 import { Subject } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
+import { map, takeUntil, tap } from 'rxjs/operators';
+import { Child } from '../../child/child';
+import { personType } from '../person-type';
+import { PersonService } from '../person.service';
 
 @Component({
   selector: 'app-person-home',
@@ -13,10 +17,18 @@ export class PersonHomeComponent implements OnInit {
 
   public createFamilyClicked$ = new Subject();
 
+  public persons$ = this.personService.persons$.pipe(
+    map(persons => persons.map(p => ({ 
+      ...p, 
+      icon: p.type === personType.child ? 'baby' as IconName : 'user' as IconName,
+      allowPhotographs: p.type === personType.child && (p as Child).allowPhotographs
+    })))
+  );
+
   private goToCreateFamily$ = this.createFamilyClicked$.pipe(
     tap(_ => this.router.navigate(['createFamily'], { relativeTo: this.route}))
   )
-  constructor(private route: ActivatedRoute, private router: Router) { }
+  constructor(private route: ActivatedRoute, private router: Router, private personService: PersonService) { }
 
   ngOnInit(): void {
     this.goToCreateFamily$.pipe(takeUntil(this.onDestroy$)).subscribe();

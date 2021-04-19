@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
 import { combineLatest, merge, Observable, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, startWith, take, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
@@ -23,6 +23,8 @@ export class FamilySelectComponent implements OnInit, ControlValueAccessor {
   public readonly personType = personType;
   private onDestroy$ = new Subject();
 
+  @Output() public allowPhotographs = new EventEmitter<boolean>();
+
   public onChange: ((_: any) => void) | undefined;
   public onTouched: (() => void) | undefined;
 
@@ -34,11 +36,11 @@ export class FamilySelectComponent implements OnInit, ControlValueAccessor {
     arr && this.persons$.next(arr);
   }
 
-  public families$: Observable<{ [key: string]: { type: personType, name: string }[] }> = this.persons$.pipe(
+  public families$: Observable<{ [key: string]: { type: personType, name: string, allowsPhotographs: boolean | undefined }[] }> = this.persons$.pipe(
     map(persons => persons.reduce((acc, person) => acc[person.familyId] ? { 
       ...acc, 
-      [person.familyId]: [ ...acc[person.familyId], { type: person.type, name: person.firstName + " " + person.lastName }].sort((a, b) => a.type - b.type)
-    } : { ...acc, [person.familyId]: [{ type: person.type, name: person.firstName + " " + person.lastName }] }, {} as any)),
+      [person.familyId]: [ ...acc[person.familyId], { allowPhotographs: (person as Child).allowPhotographs, type: person.type, name: person.firstName + " " + person.lastName }].sort((a, b) => a.type - b.type)
+    } : { ...acc, [person.familyId]: [{ allowPhotographs: (person as Child).allowPhotographs, type: person.type, name: person.firstName + " " + person.lastName }] }, {} as any)),
   );
 
   // Really gross but seems more robust... no race condition than just using writeValue$ with withLatestFrom
@@ -72,9 +74,9 @@ export class FamilySelectComponent implements OnInit, ControlValueAccessor {
 
   private familySelected$ = this.familyInput.valueChanges.pipe(
     tap(({ key }) => !key ? this.familyInput.setErrors({ required: true }) : this.familyInput.setErrors(null)),
-    map(({ key }) => key),
-    distinctUntilChanged(),
-    tap(key => this.onChange && this.onChange(key))
+    distinctUntilChanged(({ key }) => key),
+    tap(({ key }) => this.onChange && this.onChange(key)),
+    tap(({ value }) => this.allowPhotographs.emit(value.find((p: any) => p.allowPhotographs !== undefined).allowPhotographs))
   );
 
   public displayFn = (item: { key: string, value: { type: string, name: string }[]}) => 

@@ -3,29 +3,20 @@
 
 <mat-tab-group class="mt-3">
     <mat-tab label="Registration">
-        <div class="mt-2" fxLayout="row" fxLayoutGap="1rem">
-            <mat-card fxFlex="50"  *ngFor="let termFamily of currentTermFamilies$ | async">
-                <mat-card-header class="text-second">
-                    <span [ngClass]="{ 'success': termFamily.paid }"><fa-icon [icon]="['fas', 'money-bill']" class="mr-2"></fa-icon><span>{{ termFamily.paid ? 'Paid' : 'Not Paid' }}</span></span>
-                    <mat-divider [vertical]="true"></mat-divider>
-                    <h4>{{ termFamily.familyName }}</h4>
-                </mat-card-header>
-                <mat-card-content class="mt-2">
-                  <p>
-                    {{ termFamily.notes }}
-                  </p>
-                </mat-card-content>
-                <mat-card-actions>
-                  <button mat-button routerLink="registrations/{{ termFamily.familyId }}">EDIT</button>
-                </mat-card-actions>
-            </mat-card>
-        </div>        
+        <!-- <div class="mt-2" fxLayout="row" fxLayoutGap="1rem"> -->
+            <mat-nav-list>
+                <a [routerLink]="['./registrations', termFamily.familyId]" mat-list-item *ngFor="let termFamily of currentTermFamilies$ | async">
+                    <fa-icon [ngClass]="{ 'success': termFamily.paid }" [icon]="['fas', 'money-bill']" matListIcon></fa-icon>
+                    <h4 matLine>{{ termFamily.familyName }}</h4>
+                    <p matLine class="light">{{ termFamily.notes }}</p>
+                </a>
+            </mat-nav-list>
     </mat-tab>
     <mat-tab label="Sessions">
         <mat-nav-list>
             <a *ngFor="let session of currentTermSessions$ | async" mat-list-item [routerLink]="['./sessions', session._id]"> 
-                {{ session.date | date:'dd/MM/yyyy' }} 
-                {{ session | json }}
+                <fa-icon [icon]="['fas', 'clipboard']" matListIcon></fa-icon>
+                <h4 matLine>{{ session.date | date:'dd/MM/yyyy' }}</h4>
             </a>
         </mat-nav-list>    
     </mat-tab>

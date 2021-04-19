@@ -1,1 +1,19 @@
 <button mat-raised-button (click)="createFamilyClicked$.next()" color="primary">Create Family</button>
+<button class="mr-1" mat-raised-button color="accent" [matMenuTriggerFor]="addVisitor">
+    <fa-icon class="mr-1" [icon]="['fas', 'plus']"></fa-icon>Add Person
+</button>
+<mat-menu #addVisitor="matMenu">
+    <button routerLink="guardianCreate" mat-menu-item>
+        <fa-icon [icon]="['fas', 'user']" class="mr-1"></fa-icon>Adult
+    </button>
+    <button routerLink="childCreate" mat-menu-item>
+        <fa-icon [icon]="['fas', 'baby']" class="mr-1"></fa-icon>Child
+    </button>
+</mat-menu>
+
+<mat-nav-list>
+    <a mat-list-item *ngFor="let person of persons$ | async">
+        <fa-icon matListIcon [icon]="['fas', person.icon]"></fa-icon>
+        <h4 matLine>{{ person.firstName }} {{ person.lastName }}</h4>
+    </a>
+</mat-nav-list>

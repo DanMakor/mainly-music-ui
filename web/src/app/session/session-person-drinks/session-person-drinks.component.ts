@@ -22,7 +22,6 @@ export class SessionPersonDrinksComponent implements OnInit {
         return { ...acc, [drinkDisplayName]: acc[drinkDisplayName] ? [ ...acc[drinkDisplayName], guardian.firstName + ' ' + guardian.lastName ] : [guardian.firstName + ' ' + guardian.lastName] }
       }, {} as { [key: string]: string[] }))
     ),
-    tap(console.log)
   )
   
   ngOnInit(): void {

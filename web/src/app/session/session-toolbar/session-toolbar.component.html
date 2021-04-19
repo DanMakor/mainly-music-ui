@@ -1,5 +1,5 @@
-<ng-container *ngIf="{ currentTerm: currentTerm$ | async, currentSession: currentSession$ | async } as state">
-    <mat-toolbar *ngIf="state.currentTerm">
+<ng-container *ngIf="{ currentTerm: currentTerm$ | async, currentSession: currentSession$ | async, showSidebar: showSidebar$ | async } as state">
+    <mat-toolbar *ngIf="state.currentTerm && state.showSidebar">
         <button [routerLink]="['/terms', state.currentTerm._id]" mat-button>Term {{ state.currentTerm.termNumber  }}, {{ state.currentTerm.year }}</button>
         <ng-container *ngIf="state.currentSession">
             <fa-icon class="ml-2 mr-2" [icon]="['fas', 'chevron-right']"></fa-icon>

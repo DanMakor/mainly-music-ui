@@ -40,7 +40,7 @@ export class PersonService {
         ...acc, 
         [person.familyId]: [ ...acc[person.familyId], person].sort((a, b) => a.type - b.type)
       } : { ...acc, [person.familyId]: [person] }, {} as FamilyMap)
-    ),
+    )
   );
 
   constructor(private http: HttpClient, private socket: Socket) {

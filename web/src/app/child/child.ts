@@ -7,7 +7,8 @@ export interface Child {
     hasBowl: boolean;
     firstName: string;
     lastName: string;
-    type: personType
+    type: personType;
+    allowPhotographs: boolean;
 }
 
 export type ChildForCreation = Pick<Child, "dateOfBirth" | "firstName" | "lastName">;

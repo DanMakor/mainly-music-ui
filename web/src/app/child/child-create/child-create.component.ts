@@ -17,13 +17,15 @@ export class ChildCreateComponent implements OnInit {
 
   public child = new FormControl("", Validators.required);
   public familyId = new FormControl("", Validators.required);
+  public allowPhotographs$ = new Subject();
   public saveClicked$ = new Subject();
 
   public persons$ = this.personService.persons$;
 
   private saveChild$ = this.saveClicked$.pipe(
     filter(_ => this.child.valid && this.familyId.valid),
-    exhaustMap(_ => this.personService.createChild(this.child.value, this.familyId.value).pipe(
+    withLatestFrom(this.allowPhotographs$),
+    exhaustMap(([_, allowPhotographs]) => this.personService.createChild({ ...this.child.value, allowPhotographs }, this.familyId.value).pipe(
       catchAndContinue()
     )),
     filter(({ isError }) => !isError),

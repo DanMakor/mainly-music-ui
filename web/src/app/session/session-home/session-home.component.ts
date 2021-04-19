@@ -74,7 +74,7 @@ export class SessionHomeComponent implements OnInit {
         persons.map(person => ({ 
           ...person, 
           drink: (person as Guardian).drink ? getDisplayNameForDrink((person as Guardian).drink) : null,
-          isCertificateSession: attendanceMap[person._id]?.length === 6,
+          isCertificateSession: attendanceMap[person._id]?.length === 9,
           hasBirthdayInSession: birthdaysMap[person._id],
           isCheckedIn: currentSession?.personIds ? currentSession.personIds.includes(person._id) : false,
           icon: person.type === personType.child ? ['fas', 'baby'] as [IconPrefix, IconName]: ['fas', 'user'] as [IconPrefix, IconName]

@@ -30,10 +30,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .p-2 { padding: 1rem !important; }
 .pl-5 { padding-left: 4em !important;}
 .p-5 { padding: 4rem !important; }
+.p-5-minus { margin: -4rem !important }
 .ml-auto { margin-left: auto !important; }
 .d-flex { display: flex !important; }
 .align-items-center {
     align-items: center;
+}
+
+.light {
+    color: rgba(0, 0, 0, 0.6) !important;
 }
 
 .success {
@@ -41,6 +46,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 $warn: map-get($mm-app-theme, warn);
+
+.danger {
+    color: mat-color($warn) !important;
+}
 
 .bg-warn {
     background-color: mat-color($warn) !important;
@@ -53,4 +62,3 @@ $warn: map-get($mm-app-theme, warn);
 .text-second .mat-card-header-text {
     order: 1;
 }
-

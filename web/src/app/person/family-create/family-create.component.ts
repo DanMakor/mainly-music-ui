@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { filter, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -15,13 +15,17 @@ export class FamilyCreateComponent implements OnInit {
   private onDestroy$ = new Subject();
   public child = new FormControl();
   public guardian = new FormControl();
+  public allowPhotographs = new FormControl(null, Validators.required);
 
   public saveClicked$ = new Subject();
 
   constructor(private personService: PersonService, private router: Router, private route: ActivatedRoute) {}
 
   private createFamily$ = this.saveClicked$.pipe(
-    switchMap(_ => this.personService.createFamily({ guardians: [this.guardian.value], children: [this.child.value]}).pipe(
+    switchMap(_ => this.personService.createFamily({ 
+      guardians: [this.guardian.value], 
+      children: [{ ...this.child.value, allowPhotographs: this.allowPhotographs.value }]
+    }).pipe(
       catchAndContinue()
     )),
     filter(({ isError }) => !isError),

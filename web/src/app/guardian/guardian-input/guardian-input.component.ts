@@ -40,8 +40,7 @@ export class GuardianInputComponent implements OnInit {
     drink: [""],
     information: [""],
     emergencyContactName: [""],
-    emergencyContactPhone: [""],
-    allowPhotographs: [""]
+    emergencyContactPhone: [""]
   });
   
   ngOnInit(): void {

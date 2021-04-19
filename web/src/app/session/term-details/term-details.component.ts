@@ -27,7 +27,7 @@ export class TermDetailsComponent implements OnInit {
   public currentTermFamilies$ = this.termService.currentTermFamilies$.pipe(
     map(termFamilies => termFamilies?.map(termFamily => ({ 
         ...termFamily, 
-        familyName: termFamily.persons.reduce((acc, curr) => (acc ? acc + ", " : acc) + curr.firstName + " " + curr.lastName, "") 
+        familyName: termFamily.persons?.reduce((acc, curr) => (acc ? acc + ", " : acc) + curr.firstName + " " + curr.lastName, "") 
       }))
     )
   );

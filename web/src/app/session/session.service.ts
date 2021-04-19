@@ -52,18 +52,21 @@ export class SessionService {
       const sortedSessions = sessions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       const index = sortedSessions.findIndex(s => s._id === currentSession._id);
       const previousSessionDate = index === 0 || terms.find(t => t._id === sortedSessions[index].termId)?.termNumber !== 4 ? 
-        addDays(new Date(), -14) :
+        addDays(currentSession.date, -14) :
         sortedSessions[index - 1].date;
+
+      console.log(previousSessionDate);
       const birthdaysMap = children.reduce((acc, child) => ({ ...acc, [child._id]: birthdayIsBetweenSessions(child.dateOfBirth, currentSession.date, previousSessionDate)}), {} as { [key: string]: boolean });
       return { sessionId: currentSession._id, birthdaysMap };
     }),
+    tap(({ birthdaysMap }) => { console.log(birthdaysMap) }),
     share()
   );
 
   public attendanceMap$ = combineLatest([this.currentSession$, this.termService.termsInCurrentYear$]).pipe(
     withLatestFrom(this.sessionsMap$),
     map(([[currentSession, terms], sessionsMap]) => {
-      return Object.values(sessionsMap).filter(s => terms.some(t => t._id === s.termId) && s._id !== currentSession._id)
+      return Object.values(sessionsMap).filter(s => terms.some(t => t._id === s.termId))
         .reduce((acc, session) => {
           let attendanceMap = { ...acc }
           session.personIds.forEach(personId => 
@@ -119,7 +122,6 @@ export class SessionService {
     return this.http.post<any>(`${this.termUrl}/${termId}/${this.sessionUrl}/${sessionId}/checkIn`, { personId }).pipe(
       tap(_ => {
         const sessions = this.sessionsSubject$.getValue();
-        console.log('session-updated');
         this.socket.emit('sessionupdated', { ...sessions[sessionId], personIds: [ ...sessions[sessionId].personIds, personId ]});
       })
     );
