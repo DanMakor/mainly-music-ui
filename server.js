@@ -25,4 +25,11 @@ app.get('*', (req, res) => {
   res.sendFile('dist/index.html', {root});
 });
 
+// Error handler
+app.use((err, req, res, next) => {
+  console.log('Error handler', err);
+  res.status(err.status || 500);
+  res.send(err);
+});
+
 app.listen(port, () => console.log(`UI running on localhost:${port}`));
