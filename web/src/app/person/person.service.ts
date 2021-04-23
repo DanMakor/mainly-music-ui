@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map, shareReplay, skip, takeUntil, tap } from 'rxjs/operators';
+import { map, share, shareReplay, skip, takeUntil, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Child, ChildForCreation } from '../child/child';
 import { FamilyForCreation } from '../family/family';
@@ -9,6 +9,7 @@ import { Guardian, GuardianForCreation } from '../guardian/guardian';
 import { Drink } from '../drink/drink';
 import { personType } from './person-type';
 import { Socket } from 'ngx-socket-io';
+import { Staff } from '../staff/staff';
 
 interface FamilyMap {
   [key: string]: (Child | Guardian)[]
@@ -22,10 +23,19 @@ export class PersonService {
 
   private readonly url = environment.api + "/persons";
   private personsSubject$ = new BehaviorSubject<(Guardian | Child)[]>([]);
-  public persons$ = this.personsSubject$.pipe(
+  private persons$ = this.personsSubject$.pipe(
     skip(1),
     shareReplay(1)
   );
+
+  public attendees$ = this.persons$.pipe(
+    map(persons => persons.filter(person => person.type !== personType.staff)),
+    share()
+  );
+
+  public staff$ = this.persons$.pipe(
+    map(persons => persons.filter(person => person.type === personType.staff) as Staff[])
+  )
 
   public guardians$: Observable<Guardian[]> = this.persons$.pipe(
     map(persons => persons.filter(person => person.type === personType.guardian) as Guardian[])
@@ -85,6 +95,12 @@ export class PersonService {
 
   public createGuardian(child: GuardianForCreation, familyId: string) {
     return this.http.post<{ ops: Child[] }>(`${this.url}/createGuardian`, { ...child, familyId }).pipe(
+      tap((response) => this.personsSubject$.next([...this.personsSubject$.getValue(), ...response.ops]))
+    )
+  }
+
+  public createStaffMember(staffMember: Staff) {
+    return this.http.post<{ ops: Child[] }>(`${this.url}/createStaffMember`, staffMember).pipe(
       tap((response) => this.personsSubject$.next([...this.personsSubject$.getValue(), ...response.ops]))
     )
   }

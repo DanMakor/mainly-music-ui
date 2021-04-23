@@ -21,11 +21,11 @@ export class SessionBirthdaysAndCertificatesComponent implements OnInit {
     private sessionToolbarService: SessionToolbarService
   ) { }
 
-  public certificates$ = combineLatest([this.sessionService.attendanceMap$, this.personService.persons$, this.sessionService.currentSession$]).pipe(
+  public certificates$ = combineLatest([this.sessionService.attendanceMap$, this.personService.attendees$, this.sessionService.currentSession$]).pipe(
     map(([attendanceMap, persons, currentSession]) => persons.filter(p => attendanceMap[p._id]?.length === 10 && currentSession.personIds.includes(p._id)))
   );
 
-  public birthdays$ = combineLatest([this.sessionService.currentSessionBirthdaysMap$, this.personService.persons$, this.sessionService.currentSession$]).pipe(
+  public birthdays$ = combineLatest([this.sessionService.currentSessionBirthdaysMap$, this.personService.attendees$, this.sessionService.currentSession$]).pipe(
     map(([{ birthdaysMap }, persons, currentSession]) => persons.filter(p => birthdaysMap[p._id] && currentSession.personIds.includes(p._id)))
   )
 

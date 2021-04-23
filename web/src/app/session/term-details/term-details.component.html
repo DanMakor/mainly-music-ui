@@ -2,6 +2,14 @@
 <button mat-raised-button color="primary" (click)="startSessionClicked$.next()">Start Session</button>
 
 <mat-tab-group class="mt-3">
+    <mat-tab label="Sessions">
+        <mat-nav-list>
+            <a *ngFor="let session of currentTermSessions$ | async" mat-list-item [routerLink]="['./sessions', session._id]"> 
+                <fa-icon [icon]="['fas', 'clipboard']" matListIcon></fa-icon>
+                <h4 matLine>{{ session.date | date:'dd/MM/yyyy' }}</h4>
+            </a>
+        </mat-nav-list>    
+    </mat-tab>
     <mat-tab label="Registration">
         <!-- <div class="mt-2" fxLayout="row" fxLayoutGap="1rem"> -->
             <mat-nav-list>
@@ -11,13 +19,5 @@
                     <p matLine class="light">{{ termFamily.notes }}</p>
                 </a>
             </mat-nav-list>
-    </mat-tab>
-    <mat-tab label="Sessions">
-        <mat-nav-list>
-            <a *ngFor="let session of currentTermSessions$ | async" mat-list-item [routerLink]="['./sessions', session._id]"> 
-                <fa-icon [icon]="['fas', 'clipboard']" matListIcon></fa-icon>
-                <h4 matLine>{{ session.date | date:'dd/MM/yyyy' }}</h4>
-            </a>
-        </mat-nav-list>    
     </mat-tab>
 </mat-tab-group>

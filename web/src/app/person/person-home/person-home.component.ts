@@ -17,7 +17,7 @@ export class PersonHomeComponent implements OnInit {
 
   public createFamilyClicked$ = new Subject();
 
-  public persons$ = this.personService.persons$.pipe(
+  public persons$ = this.personService.attendees$.pipe(
     map(persons => persons.map(p => ({ 
       ...p, 
       icon: p.type === personType.child ? 'baby' as IconName : 'user' as IconName,

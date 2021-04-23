@@ -1,7 +1,5 @@
 
-<div [formGroup]="guardian">
-    <mm-family-select [persons]="persons$ | async" [formControl]="familyId"></mm-family-select>
-  
+<div [formGroup]="staffMember">  
     <mat-form-field appearance="fill">
         <mat-label>First Name</mat-label>
         <input matInput formControlName="firstName" placeholder="Ex. John">

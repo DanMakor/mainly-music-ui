@@ -35,7 +35,7 @@ export class TermRegisterComponent implements OnInit {
     })
   )
 
-  public persons$ = combineLatest([this.personService.persons$, this.termService.currentTerm$]).pipe(
+  public persons$ = combineLatest([this.personService.attendees$, this.termService.currentTerm$]).pipe(
     map(([persons, term]) => this.registrationId ? persons : persons 
       .filter(person => !term?.registrations.some(({ familyId }) => person.familyId === familyId))
     )

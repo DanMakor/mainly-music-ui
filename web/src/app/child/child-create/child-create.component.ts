@@ -20,7 +20,7 @@ export class ChildCreateComponent implements OnInit {
   public allowPhotographs$ = new Subject();
   public saveClicked$ = new Subject();
 
-  public persons$ = this.personService.persons$;
+  public persons$ = this.personService.attendees$;
 
   private saveChild$ = this.saveClicked$.pipe(
     filter(_ => this.child.valid && this.familyId.valid),
