@@ -21,6 +21,6 @@ export interface StaffMemberForDisplay {
     firstName: string,
     lastName: string,
     isCheckedIn: boolean,
-    drink?: Drink
+    drink?: string
     type: personType,
 }

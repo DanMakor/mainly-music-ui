@@ -20,7 +20,7 @@ export class SessionHomeAttendeesComponent implements OnInit {
   @Output() public checkedOut = new EventEmitter<string>();
   @Output() public hasBowlChanged = new EventEmitter<{ id: string, hasBowl: boolean }>();
 
-  @Input() public set families(map: { [key: string]: PersonForDisplay[] }) {
+  @Input() public set families(map: { [key: string]: PersonForDisplay[] } | null) {
     map && this.familiesMap$.next(map);
   }
   private familiesMap$ = new ReplaySubject<{ [key: string]: PersonForDisplay[] }>(1);

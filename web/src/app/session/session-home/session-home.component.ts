@@ -8,7 +8,7 @@ import { combineLatest, merge, Observable, Subject } from 'rxjs';
 import { debounceTime, exhaustMap, filter, map, mapTo, mergeMap, share, shareReplay, startWith, take, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { Guardian } from 'src/app/guardian/guardian';
 import { getDisplayNameForDrink } from 'src/app/helpers';
-import { PersonForDisplay } from 'src/app/person/person-for-display';
+import { PersonForDisplay, StaffMemberForDisplay } from 'src/app/person/person-for-display';
 import { personType } from 'src/app/person/person-type';
 import { PersonService } from 'src/app/person/person.service';
 import { catchAndContinue } from 'src/app/shared/catch-and-continue';
@@ -40,9 +40,9 @@ export class SessionHomeComponent implements OnInit {
   public currentSessionStaffMembers$ = combineLatest([this.sessionService.currentSession$, this.personService.staffMembers$]).pipe(
     map(([currentSession, staffMembers]) => staffMembers.map(sm => ({
         ...sm,
-        drink: sm.drink ? getDisplayNameForDrink(sm.drink) : 'No Drink',
+        drink: getDisplayNameForDrink(sm.drink),
         isCheckedIn: currentSession?.personIds ? currentSession.personIds.includes(sm._id) : false,
-      })).sort((a, b) => a.lastName.localeCompare(b.lastName))
+      })).sort((a, b) => a.lastName.localeCompare(b.lastName)) as StaffMemberForDisplay[]
     )
   );
 
@@ -81,10 +81,10 @@ export class SessionHomeComponent implements OnInit {
       shareReplay(1)
   );
 
-  public checkInClicked$ = new Subject<PersonForDisplay>();
+  public checkInClicked$ = new Subject<PersonForDisplay | StaffMemberForDisplay>();
   private hasFamilyMemberCheckedIn$ = this.checkInClicked$.pipe(
     withLatestFrom(this.currentSessionFamilies$),
-    map(([person, familyMap]) => ({ person, checkInRequired: !(person.type === personType.staff) && !familyMap[person.familyId].some(p => p.isCheckedIn) })),
+    map(([person, familyMap]) => ({ person, checkInRequired: !(person.type === personType.staff) && !familyMap[(person as PersonForDisplay).familyId].some(p => p.isCheckedIn) })),
     share()
   );
 
@@ -125,7 +125,7 @@ export class SessionHomeComponent implements OnInit {
 
   private childCheckedIn$ = this.checkIn$.pipe(
     filter(({ type }) => type === personType.child)
-  );
+  ) as Observable<PersonForDisplay>;
 
   private showHasBirthdayToast$ = this.childCheckedIn$.pipe(
     filter(({ hasBirthdayInSession, isCertificateSession }) => hasBirthdayInSession && !isCertificateSession),

@@ -7,10 +7,10 @@ import { PersonForDisplay, StaffMemberForDisplay } from 'src/app/person/person-f
   styleUrls: ['./session-home-staff.component.scss']
 })
 export class SessionHomeStaffComponent implements OnInit {
-  @Output() public checkedIn = new EventEmitter<PersonForDisplay>();
+  @Output() public checkedIn = new EventEmitter<StaffMemberForDisplay>();
   @Output() public checkedOut = new EventEmitter<string>();
 
-  @Input() public staffMembers: StaffMemberForDisplay[] = [];
+  @Input() public staffMembers: StaffMemberForDisplay[] | null = [];
   
   constructor() { }
 
