@@ -48,6 +48,7 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
     { name: "Full Cream", type: drinkType.coffee },
     { name: "Soy", type: drinkType.coffee },
     { name: "No Milk", type: drinkType.tea },
+    { name: "My own milk", type: drinkType.coffee }
   ];
 
   public readonly strengths = [
@@ -79,7 +80,7 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
     merge((this.drinkForm.get('type') as FormControl).valueChanges, this.writeType$),
     merge((this.drinkForm.get('name') as FormControl).valueChanges, this.writeName$)
   ]).pipe(
-    map(([type, name]) => type !== drinkType.water && type !== undefined && (name !== "Long Black" && name !== "Short Black") 
+    map(([type, name]) => type !== drinkType.water && type !== drinkType.none && type !== undefined && (name !== "Long Black" && name !== "Short Black") 
       ? this.milkTypes.filter(mt => mt.type === drinkType.tea ? mt.type === type : true).map(({ name }) => name) 
       : []
     ),
@@ -99,7 +100,9 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
       this.resetDrinkName$
     ).pipe(takeUntil(this.onDestroy$)).subscribe();
     this.drinkForm.valueChanges.pipe(takeUntil(this.onDestroy$)).subscribe(drink => {
-      if (this.onChange) { this.onChange({ ...drink, strength: drink.strength === "Full" ? null : drink.strength }); }
+      if (this.onChange) { 
+        console.log(drink.type);
+        this.onChange(drink.type === drinkType.none ? null : { ...drink, strength: drink.strength === "Full" ? null : drink.strength }); }
     });
   }
 
@@ -107,8 +110,10 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
     (_: AbstractControl) => this.drinkForm.errors
 
   writeValue(obj: any): void {
+    console.log(obj);
     const drink = obj && { ...obj, strength: !obj?.strength ? this.strengths[0] : obj?.strength };
-    this.drinkForm.reset(drink ? drink : { milk: this.milkTypes[0], strength: this.strengths[0] }, { emitEvent: false });
+    console.log(drink);
+    this.drinkForm.reset(drink ? drink : { type: drinkType.none }, { emitEvent: false });
     this.writeValue$.next(obj);
   }
   

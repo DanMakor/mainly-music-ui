@@ -15,3 +15,12 @@ export interface PersonForDisplay {
     familyId: string,
     drink?: Drink
 }
+
+export interface StaffMemberForDisplay {
+    _id: string,
+    firstName: string,
+    lastName: string,
+    isCheckedIn: boolean,
+    drink?: Drink
+    type: personType,
+}

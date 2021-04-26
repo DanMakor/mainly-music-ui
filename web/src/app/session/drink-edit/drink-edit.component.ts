@@ -7,6 +7,7 @@ import { exhaustMap, filter, map, share, shareReplay, takeUntil, tap } from 'rxj
 import { catchAndContinue } from 'src/app/shared/catch-and-continue';
 import { PersonService } from '../../person/person.service';
 import { Guardian } from 'src/app/guardian/guardian';
+import { Staff } from 'src/app/staff/staff';
 
 @Component({
   selector: 'app-drink-edit',
@@ -19,23 +20,24 @@ export class DrinkEditComponent implements OnInit, OnDestroy {
   public drink = new FormControl();
   public saveDrinkClicked$ = new Subject();
 
-  public guardian$ = this.personService.guardians$.pipe(
-    map(persons => persons.find(person => person._id === this.id) as Guardian),
+  public person$ = this.personService.persons$.pipe(
+    map(persons => persons.find(person => person._id === this.id) as (Guardian | Staff)),
     shareReplay(1)
   );
 
-  public title$ = this.guardian$.pipe(
-    map(guardian => `Edit drink for ${guardian.firstName}`)
+  public title$ = this.person$.pipe(
+    map(person => `Edit drink for ${person.firstName}`)
   )
 
-  private setDrink$ = this.guardian$.pipe(
-    map(guardian => guardian.drink),
+  private setDrink$ = this.person$.pipe(
+    map(person => person.drink),
     filter(drink => !!drink),
     tap(drink => this.drink.reset(drink))
   );
 
   private updateDrink$ = this.saveDrinkClicked$.pipe(
     filter(_ => this.drink.valid),
+    tap(_ => console.log(this.drink.value)),
     exhaustMap(_ => this.personService.updateDrink(this.id, this.drink.value).pipe(
         catchAndContinue()
       )

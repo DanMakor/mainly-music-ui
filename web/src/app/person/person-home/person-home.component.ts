@@ -17,11 +17,10 @@ export class PersonHomeComponent implements OnInit {
 
   public createFamilyClicked$ = new Subject();
 
-  public persons$ = this.personService.attendees$.pipe(
+  public persons$ = this.personService.persons$.pipe(
     map(persons => persons.map(p => ({ 
       ...p, 
-      icon: p.type === personType.child ? 'baby' as IconName : 'user' as IconName,
-      allowPhotographs: p.type === personType.child && (p as Child).allowPhotographs
+      icon: p.type === personType.child ? 'baby' as IconName : p.type === personType.guardian ? 'user' as IconName : 'user-secret' as IconName
     })))
   );
 

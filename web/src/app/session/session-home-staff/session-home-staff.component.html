@@ -1,0 +1,34 @@
+<button routerLink="./createStaff" color="primary" mat-button mat-raised-button>
+    <fa-icon class="mr-1" [icon]="['fas', 'plus']"></fa-icon>Add Staff Member
+</button>
+
+<div *ngFor="let person of staffMembers">
+        <mat-card class="mt-2" fxLayout="row" fxLayoutAlign="start center">
+            <span fxFlex="20">
+                <fa-icon [icon]="['fas', 'user-secret']" class="mr-1"></fa-icon>
+                <span class="mr-2">{{ person.firstName}} {{ person.lastName }}</span>
+            </span>
+            <span fxFlex="20">
+                <button *ngIf="!person.isCheckedIn" mat-raised-button color="primary" (click)="checkedIn.emit(person)">
+                    Check in
+                </button>
+                <div *ngIf="person.isCheckedIn" class="check">
+                    <fa-icon [icon]="['fas', 'check']" class="success ml-1 mr-1"></fa-icon>
+                </div>
+            </span>
+            
+            <span fxFlex="15" class="mr-1">
+                <fa-icon class="mr-1" [icon]="['fas', 'coffee']"></fa-icon>
+                {{ person.drink }}
+            </span>
+            <span fxFlex="20">
+                <button mat-raised-button color="accent" class="ml-5" [routerLink]="[person._id]">
+                    Edit Drink
+                </button>
+            </span>
+
+            <button class="ml-auto" *ngIf="person.isCheckedIn" mat-button (click)="checkedOut.emit(person._id)">
+                <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>
+            </button>
+        </mat-card>
+</div>

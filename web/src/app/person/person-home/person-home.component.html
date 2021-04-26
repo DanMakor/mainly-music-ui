@@ -1,5 +1,5 @@
-<button mat-raised-button (click)="createFamilyClicked$.next()" color="primary">Create Family</button>
-<button class="mr-1" mat-raised-button color="accent" [matMenuTriggerFor]="addVisitor">
+<button class="mr-1" mat-raised-button (click)="createFamilyClicked$.next()" color="primary">Create Family</button>
+<button mat-raised-button color="accent" [matMenuTriggerFor]="addVisitor">
     <fa-icon class="mr-1" [icon]="['fas', 'plus']"></fa-icon>Add Person
 </button>
 <mat-menu #addVisitor="matMenu">

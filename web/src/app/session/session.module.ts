@@ -20,6 +20,9 @@ import { SessionBowlsComponent } from './session-bowls/session-bowls.component';
 import { SessionReportsComponent } from './session-reports/session-reports.component';
 import { SessionPersonDrinksComponent } from './session-person-drinks/session-person-drinks.component';
 import { SessionToolbarComponent } from './session-toolbar/session-toolbar.component';
+import { SessionHomeAttendeesComponent } from './session-home-attendees/session-home-attendees.component';
+import { SessionHomeStaffComponent } from './session-home-staff/session-home-staff.component';
+import { StaffCreateComponent } from '../staff/staff-create/staff-create.component';
 
 const routes: Routes = [
   { path: "terms", component: TermHomeComponent },
@@ -37,6 +40,7 @@ const routes: Routes = [
           { path: "", component: SessionHomeComponent },
           { path: 'createChild', component: ChildCreateComponent },
           { path: 'createGuardian', component: GuardianCreateComponent },
+          { path: 'createStaff', component: StaffCreateComponent },
           { 
             path: 'reports', 
             children: [
@@ -68,7 +72,7 @@ const routes: Routes = [
     SessionDrinksComponent, 
     SessionBowlsComponent, 
     SessionPersonDrinksComponent, 
-    SessionToolbarComponent
+    SessionToolbarComponent, SessionHomeAttendeesComponent, SessionHomeStaffComponent
   ],
   imports: [
     SharedModule,

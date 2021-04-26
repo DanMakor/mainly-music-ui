@@ -2,5 +2,6 @@ export enum drinkType {
     coffee,
     tea,
     hotChoc,
-    water
+    water,
+    none
 }

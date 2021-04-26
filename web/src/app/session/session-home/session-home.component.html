@@ -1,83 +1,23 @@
-<mat-form-field>
-    <mat-label>Type in your name to find your family</mat-label>
-    <input #search [formControl]="input" matInput placeholder="Search">
-</mat-form-field>
-
-<div fxLayout="row" fxLayoutAlign="space-between">
-    <button class="mr-1" mat-raised-button color="primary" [matMenuTriggerFor]="addVisitor">
-        <fa-icon class="mr-1" [icon]="['fas', 'plus']"></fa-icon>Add Visitor
-    </button>
-    <mat-menu #addVisitor="matMenu">
-        <button (click)="addGuardianClicked$.next()" mat-menu-item>
-            <fa-icon [icon]="['fas', 'user']" class="mr-1"></fa-icon>Adult
-        </button>
-        <button (click)="addChildClicked$.next()" mat-menu-item>
-            <fa-icon [icon]="['fas', 'baby']" class="mr-1"></fa-icon>Child
-        </button>
-    </mat-menu>
-    
-    <button class="mr-1" routerLink='./reports' mat-raised-button color="primary">
-        Admin Reports
-    </button>
-</div>
 
 
-<div *ngFor="let persons of filteredFamilies$ | async; let last=last;">
-    <div *ngFor="let person of persons">
-        <mat-card class="mt-2" fxLayout="row" fxLayoutAlign="start center">
-            <span fxFlex="20">
-                <fa-icon [icon]="person.icon" class="mr-1"></fa-icon>
-                <span class="mr-2">{{ person.firstName}} {{ person.lastName }}</span>
-            </span>
-            <span fxFlex="20">
-                <button *ngIf="!person.isCheckedIn" mat-raised-button color="primary" (click)="checkInClicked$.next(person)">
-                    Check in
-                </button>
-                <div *ngIf="person.isCheckedIn" class="check">
-                    <fa-icon [icon]="['fas', 'check']" class="success ml-1 mr-1"></fa-icon>
-                </div>
-            </span>
-            
-            <ng-container *ngIf="person.type === personType.guardian">
-                <span fxFlex="15" class="mr-1">
-                    <fa-icon class="mr-1" [icon]="['fas', 'coffee']"></fa-icon>
-                    {{ person.drink }}
-                </span>
-                <span fxFlex="20">
-                    <button mat-raised-button color="accent" class="ml-5" (click)="editDrinkClicked$.next(person._id)">
-                        Edit Drink
-                    </button>
-                </span>
-            </ng-container>
-
-            <ng-container *ngIf="person.type === personType.child">
-                <span fxFlex="15" class="morning-tea mr-1"><fa-icon class="mr-1" [icon]="['fas', 'cookie']"></fa-icon>Needs Morning Tea?</span>
-                <span fxFlex="20">
-                    <span class="has-bowl-button-group">
-                        <button mat-button color="accent" (click)="hasBowlYesSubject$.next(person._id)" [ngClass]="{ 'checked': person.hasBowl }" class="has-bowl-button">
-                            Yes
-                        </button>
-                        <button mat-button color="accent" (click)="hasBowlNoSubject$.next(person._id)" [ngClass]="{ 'checked': !person.hasBowl }" class="has-bowl-button">
-                            No
-                        </button>
-                    </span>
-                </span>
-            </ng-container>
-
-            <span fxFlex="3">
-                <fa-icon *ngIf="person.isCertificateSession" class="certificate" [icon]="['fas', 'award']"></fa-icon>
-            </span>
-            <span fxFlex="3">
-                <fa-icon *ngIf="person.hasBirthdayInSession" class="birthday" [icon]="['fas', 'birthday-cake']"></fa-icon>
-            </span>
-
-            <button class="ml-auto" *ngIf="person.isCheckedIn" mat-button (click)="checkOutClicked$.next(person._id)">
-                <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>
-            </button>
-        </mat-card>
-    </div>
-    <button class="mt-2" (click)='checkInFamilyClicked$.next()' mat-raised-button color="accent">
-        Check in family
-    </button>
-    <mat-divider class="mt-4 mb-4" *ngIf="!last"></mat-divider>
-</div>
+<mat-tab-group class="tabs">
+    <mat-tab label="Families">
+        <div class="pt-3">
+            <mm-session-home-attendees
+                [families]="currentSessionFamilies$ | async"
+                (checkedIn)="checkInClicked$.next($event)"
+                (checkedOut)="checkOutClicked$.next($event)"
+                (hasBowlChanged)="hasBowlSubject$.next($event)"
+            ></mm-session-home-attendees>  
+        </div>
+    </mat-tab>
+    <mat-tab label="Staff">
+        <div class="pt-3">
+            <mm-session-home-staff
+                [staffMembers]="currentSessionStaffMembers$ | async"
+                (checkedIn)="checkInClicked$.next($event)"
+                (checkedOut)="checkOutClicked$.next($event)"
+            ></mm-session-home-staff>  
+        </div>
+    </mat-tab>
+</mat-tab-group>

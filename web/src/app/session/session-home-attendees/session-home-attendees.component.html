@@ -1,0 +1,83 @@
+<mat-form-field>
+    <mat-label>Type in your name to find your family</mat-label>
+    <input #search [formControl]="input" matInput placeholder="Search">
+</mat-form-field>
+
+<div fxLayout="row" fxLayoutAlign="space-between">
+    <button class="mr-1" mat-raised-button color="primary" [matMenuTriggerFor]="addVisitor">
+        <fa-icon class="mr-1" [icon]="['fas', 'plus']"></fa-icon>Add Visitor
+    </button>
+    <mat-menu #addVisitor="matMenu">
+        <button routerLink="./guardianCreate" mat-menu-item>
+            <fa-icon [icon]="['fas', 'user']" class="mr-1"></fa-icon>Adult
+        </button>
+        <button routerLink="./childCreate" mat-menu-item>
+            <fa-icon [icon]="['fas', 'baby']" class="mr-1"></fa-icon>Child
+        </button>
+    </mat-menu>
+    
+    <button class="mr-1" routerLink='./reports' mat-raised-button color="primary">
+        Admin Reports
+    </button>
+</div>
+
+
+<div *ngFor="let persons of filteredFamilies$ | async; let last=last;">
+    <div *ngFor="let person of persons">
+        <mat-card class="mt-2" fxLayout="row" fxLayoutAlign="start center">
+            <span fxFlex="20">
+                <fa-icon [icon]="person.icon" class="mr-1"></fa-icon>
+                <span class="mr-2">{{ person.firstName}} {{ person.lastName }}</span>
+            </span>
+            <span fxFlex="20">
+                <button *ngIf="!person.isCheckedIn" mat-raised-button color="primary" (click)="checkedIn.emit(person)">
+                    Check in
+                </button>
+                <div *ngIf="person.isCheckedIn" class="check">
+                    <fa-icon [icon]="['fas', 'check']" class="success ml-1 mr-1"></fa-icon>
+                </div>
+            </span>
+            
+            <ng-container *ngIf="person.type === personType.guardian">
+                <span fxFlex="15" class="mr-1">
+                    <fa-icon class="mr-1" [icon]="['fas', 'coffee']"></fa-icon>
+                    {{ person.drink }}
+                </span>
+                <span fxFlex="20">
+                    <button mat-raised-button color="accent" class="ml-5" [routerLink]="[person._id]">
+                        Edit Drink
+                    </button>
+                </span>
+            </ng-container>
+
+            <ng-container *ngIf="person.type === personType.child">
+                <span fxFlex="15" class="morning-tea mr-1"><fa-icon class="mr-1" [icon]="['fas', 'cookie']"></fa-icon>Needs Morning Tea?</span>
+                <span fxFlex="20">
+                    <span class="has-bowl-button-group">
+                        <button mat-button color="accent" (click)="hasBowlChanged.emit({ id: person._id, hasBowl: true })" [ngClass]="{ 'checked': person.hasBowl }" class="has-bowl-button">
+                            Yes
+                        </button>
+                        <button mat-button color="accent" (click)="hasBowlChanged.emit({ id: person._id, hasBowl: false })" [ngClass]="{ 'checked': !person.hasBowl }" class="has-bowl-button">
+                            No
+                        </button>
+                    </span>
+                </span>
+            </ng-container>
+
+            <span fxFlex="3">
+                <fa-icon *ngIf="person.isCertificateSession" class="certificate" [icon]="['fas', 'award']"></fa-icon>
+            </span>
+            <span fxFlex="3">
+                <fa-icon *ngIf="person.hasBirthdayInSession" class="birthday" [icon]="['fas', 'birthday-cake']"></fa-icon>
+            </span>
+
+            <button class="ml-auto" *ngIf="person.isCheckedIn" mat-button (click)="checkedOut.emit(person._id)">
+                <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>
+            </button>
+        </mat-card>
+    </div>
+    <button class="mt-2" (click)='checkInFamilyClicked$.next()' mat-raised-button color="accent">
+        Check in family
+    </button>
+    <mat-divider class="mt-4 mb-4" *ngIf="!last"></mat-divider>
+</div>

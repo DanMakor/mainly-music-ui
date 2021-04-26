@@ -22,18 +22,17 @@ export class PersonService {
   private onDestroy$ = new Subject();
 
   private readonly url = environment.api + "/persons";
-  private personsSubject$ = new BehaviorSubject<(Guardian | Child)[]>([]);
-  private persons$ = this.personsSubject$.pipe(
+  private personsSubject$ = new BehaviorSubject<(Guardian | Child | Staff)[]>([]);
+  public persons$ = this.personsSubject$.pipe(
     skip(1),
     shareReplay(1)
   );
 
   public attendees$ = this.persons$.pipe(
-    map(persons => persons.filter(person => person.type !== personType.staff)),
-    share()
+    map(persons => persons.filter(person => person.type !== personType.staff) as (Child | Guardian)[]),
   );
 
-  public staff$ = this.persons$.pipe(
+  public staffMembers$ = this.persons$.pipe(
     map(persons => persons.filter(person => person.type === personType.staff) as Staff[])
   )
 
@@ -45,7 +44,7 @@ export class PersonService {
     map(persons => persons.filter(person => person.type === personType.child) as Child[])
   )
 
-  public families$: Observable<FamilyMap> = this.persons$.pipe(
+  public families$: Observable<FamilyMap> = this.attendees$.pipe(
     map(persons => persons.reduce((acc, person) => acc[person.familyId] ? { 
         ...acc, 
         [person.familyId]: [ ...acc[person.familyId], person].sort((a, b) => a.type - b.type)
@@ -70,10 +69,10 @@ export class PersonService {
   }
 
   public updateDrink(personId: string, drink: Drink): Observable<Guardian> {
-    return this.http.post<Guardian>(`${this.url}/${personId}/drink`, drink).pipe(
+    return this.http.post<Guardian>(`${this.url}/${personId}/drink`, { drink }).pipe(
       tap(_ => {
         const persons = this.personsSubject$.getValue();
-        this.socket.emit('personupdated', ({ ...persons.find(p => p._id === personId), drink: { ...drink } }))
+        this.socket.emit('personupdated', ({ ...persons.find(p => p._id === personId), drink: drink ? { ...drink } : null }))
       })
     );
   }

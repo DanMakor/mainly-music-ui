@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
 import { combineLatest, merge, Observable, Subject } from 'rxjs';
-import { debounceTime, exhaustMap, filter, map, mapTo, mergeMap, share, startWith, take, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
+import { debounceTime, exhaustMap, filter, map, mapTo, mergeMap, share, shareReplay, startWith, take, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { Guardian } from 'src/app/guardian/guardian';
 import { getDisplayNameForDrink } from 'src/app/helpers';
 import { PersonForDisplay } from 'src/app/person/person-for-display';
@@ -30,31 +30,20 @@ export class SessionHomeComponent implements OnInit {
   addGuardianClickedUrl$ = this.addGuardianClicked$.pipe(mapTo('createGuardian'))
   public addChildClicked$ = new Subject();
   addChildClickedUrl$ = this.addChildClicked$.pipe(mapTo('createChild'))
-  public checkInFamilyClicked$ = new Subject();
 
-  public hasBowlNoSubject$ = new Subject<string>();
-  public hasBowlYesSubject$ = new Subject<string>();
+  public hasBowlSubject$ = new Subject<{ id: string, hasBowl: boolean }>();
 
   private readonly sessionId = this.route.snapshot.paramMap.get('sessionId') as string;
   private readonly termId = this.route.snapshot.paramMap.get('termId') as string;
   public readonly personType = personType;
 
-  private updateSearchInput$ = this.checkInFamilyClicked$.pipe(
-    tap(_ => this.input.setValue(""))
-  );
-
-  public input = new FormControl();
-  private setSearchString$ =  merge(
-    this.input.valueChanges
-  ).pipe(
-    tap(searchString => this.searchService.setSearchString(searchString))
-  );
-
-  private setSearchInput$ = merge(
-    this.searchService.searchString$
- ).pipe(
-    take(1),
-    tap(searchString => this.input.setValue(searchString, { emitEvent: false }))
+  public currentSessionStaffMembers$ = combineLatest([this.sessionService.currentSession$, this.personService.staffMembers$]).pipe(
+    map(([currentSession, staffMembers]) => staffMembers.map(sm => ({
+        ...sm,
+        drink: sm.drink ? getDisplayNameForDrink(sm.drink) : 'No Drink',
+        isCheckedIn: currentSession?.personIds ? currentSession.personIds.includes(sm._id) : false,
+      })).sort((a, b) => a.lastName.localeCompare(b.lastName))
+    )
   );
 
   private currentSessionBirthdaysMap$ = this.sessionService.currentSessionBirthdaysMap$.pipe(
@@ -70,7 +59,7 @@ export class SessionHomeComponent implements OnInit {
     take(1)  
   )
 
-  private currentSessionFamilies$: Observable<{ [key: string]: PersonForDisplay[] }> = 
+  public currentSessionFamilies$: Observable<{ [key: string]: PersonForDisplay[] }> = 
     combineLatest([
       this.sessionService.currentSession$,
       this.currentSessionBirthdaysMap$, 
@@ -82,44 +71,20 @@ export class SessionHomeComponent implements OnInit {
         [key]: 
         persons.map(person => ({ 
           ...person, 
-          drink: (person as Guardian).drink ? getDisplayNameForDrink((person as Guardian).drink) : null,
+          drink: getDisplayNameForDrink((person as Guardian).drink),
           isCertificateSession: attendanceMap[person._id]?.length === 9,
           hasBirthdayInSession: birthdaysMap[person._id],
           isCheckedIn: currentSession?.personIds ? currentSession.personIds.includes(person._id) : false,
           icon: person.type === personType.child ? ['fas', 'baby'] as [IconPrefix, IconName]: ['fas', 'user'] as [IconPrefix, IconName]
         })
       )}), {})),
+      shareReplay(1)
   );
-
-  public filteredFamilies$ = combineLatest([this.currentSessionFamilies$, this.searchService.searchString$]).pipe(
-    map(([familyMap, filterString]) => {
-      if (!filterString) {
-        return [];
-      }
-
-      const filterStrings = filterString.split(' ');
-      return Object.values(familyMap)
-        .filter(persons => persons.some(person => this.personMatchesFilterString(filterStrings, person)))
-        .map(persons => persons.sort((a, b) => {
-          const aMatches = this.personMatchesFilterString(filterStrings, a);
-          const bMatches = this.personMatchesFilterString(filterStrings, b);
-          return aMatches && bMatches ? 0
-            : aMatches && !bMatches ? -1 : 
-            1
-        }));
-    }),
-    share()
-  );
-
-  private personMatchesFilterString(filterStrings: string[], { firstName, lastName }: PersonForDisplay) {
-    return filterStrings
-      .every(fs => (firstName.trim() + lastName.trim()).toLocaleLowerCase().includes(fs.toLocaleLowerCase().trim()))
-  }
 
   public checkInClicked$ = new Subject<PersonForDisplay>();
   private hasFamilyMemberCheckedIn$ = this.checkInClicked$.pipe(
     withLatestFrom(this.currentSessionFamilies$),
-    map(([person, familyMap]) => ({ person, checkInRequired: !familyMap[person.familyId].some(p => p.isCheckedIn) })),
+    map(([person, familyMap]) => ({ person, checkInRequired: !(person.type === personType.staff) && !familyMap[person.familyId].some(p => p.isCheckedIn) })),
     share()
   );
 
@@ -184,14 +149,11 @@ export class SessionHomeComponent implements OnInit {
     ))
   )
 
-  private updateHasBowl$ = merge(
-    this.hasBowlNoSubject$.pipe(map(id => ({ id, hasBowl: false }))),
-    this.hasBowlYesSubject$.pipe(map(id => ({ id, hasBowl: true })))
-  ).pipe(
+  private updateHasBowl$ = this.hasBowlSubject$.pipe(
     mergeMap(({ id, hasBowl }) => this.personService.updateHasBowl(id, hasBowl).pipe(
       catchAndContinue()
     ))
-  )
+  );
 
   private navigate$ = merge(
     this.editDrinkClickedUrl$,
@@ -207,8 +169,7 @@ export class SessionHomeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private searchService: SearchService
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -217,14 +178,11 @@ export class SessionHomeComponent implements OnInit {
       this.checkOut$,
       this.updateHasBowl$,
       this.navigate$,
-      this.setSearchString$,
-      this.updateSearchInput$,
       this.showHasBirthdayAndHasCertificateToast$,
       this.showHasBirthdayToast$,
       this.showHasCertificateToast$
     ).pipe(takeUntil(this.onDestroy$)).subscribe();
 
-    this.setSearchInput$.subscribe();
   }
 
   ngOnDestroy(): void {

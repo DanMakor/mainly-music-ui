@@ -22,9 +22,15 @@ export class SessionDrinksComponent implements OnInit {
         return { ...acc, [drinkDisplayName]: acc[drinkDisplayName] ? ++acc[drinkDisplayName] : 1 }
       }, {} as { [key: string]: number }))
     )
-  )
+  );
+
+  public currentSessionStaffMembers$ = combineLatest([this.sessionService.currentSession$, this.personService.staffMembers$]).pipe(
+    map(([currentSession, staffMembers]) => staffMembers
+      .filter(staffMember => currentSession.personIds.includes(staffMember._id))
+      .map(staffMember => ({ ...staffMember, drink: getDisplayNameForDrink(staffMember.drink) }))
+    )
+  );
 
   ngOnInit(): void {
   }
-
 }

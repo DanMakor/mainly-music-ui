@@ -20,6 +20,10 @@ export function addDays(date: Date, days: number): Date {
 }
 
 export function getDisplayNameForDrink(drink: Drink): string {
+    if (!drink) {
+        return 'No Drink';
+    }
+
     let displayName = '';
     displayName += drink.strength ? drink.strength + ' Strength ' : ' ';
 
@@ -31,7 +35,7 @@ export function getDisplayNameForDrink(drink: Drink): string {
         displayName += drink.name + ' '; 
     }
 
-    if (drink.milk === "Soy" || drink.milk === "No Milk") {
+    if (drink.milk === "Soy" || drink.milk === "No Milk" || drink.milk === "My own milk") {
         displayName += 'with ' + drink.milk
     }
 
