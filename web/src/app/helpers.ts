@@ -2,6 +2,9 @@ import { Drink } from './drink/drink';
 import { drinkType } from './drink/drink-input/drink-type';
 
 export function birthdayIsBetweenSessions(date: Date, sessionDate: Date, lastSessionDate: Date): boolean {
+    if (!date) {
+        return false;
+    }
     const zeroedDate = new Date(date.valueOf());
     zeroedDate.setFullYear(0);
     const zeroedLastSessionDate = addDays(lastSessionDate, 1)
