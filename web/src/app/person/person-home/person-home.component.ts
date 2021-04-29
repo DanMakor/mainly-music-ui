@@ -1,21 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IconName } from '@fortawesome/fontawesome-svg-core';
-import { Subject } from 'rxjs';
+import { merge, Subject } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
+import { Guardian } from 'src/app/guardian/guardian';
+import { Staff } from 'src/app/staff/staff';
 import { Child } from '../../child/child';
 import { personType } from '../person-type';
 import { PersonService } from '../person.service';
 
 @Component({
-  selector: 'app-person-home',
+  selector: 'mm-person-home',
   templateUrl: './person-home.component.html',
-  styleUrls: ['./person-home.component.scss']
+  styleUrls: ['./person-home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PersonHomeComponent implements OnInit {
   private onDestroy$ = new Subject();
 
   public createFamilyClicked$ = new Subject();
+  public editPersonClicked$ = new Subject<Child | Guardian | Staff>();
 
   public persons$ = this.personService.persons$.pipe(
     map(persons => persons.map(p => ({ 
@@ -26,11 +30,19 @@ export class PersonHomeComponent implements OnInit {
 
   private goToCreateFamily$ = this.createFamilyClicked$.pipe(
     tap(_ => this.router.navigate(['createFamily'], { relativeTo: this.route}))
-  )
+  );
+
+  private goToEditPerson$ = this.editPersonClicked$.pipe(
+    tap(person => this.router.navigate(['/' + personType[person.type] + 's', person._id]))
+  );
+
   constructor(private route: ActivatedRoute, private router: Router, private personService: PersonService) { }
 
   ngOnInit(): void {
-    this.goToCreateFamily$.pipe(takeUntil(this.onDestroy$)).subscribe();
+    merge(
+      this.goToCreateFamily$,
+      this.goToEditPerson$
+    ).pipe(takeUntil(this.onDestroy$)).subscribe();
   }
 
   ngOnDestroy(): void {

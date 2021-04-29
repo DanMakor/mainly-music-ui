@@ -17,21 +17,11 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ErrorInterceptor } from './core/error.interceptor';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { LoadingInterceptor } from './core/loading.interceptor';
+import { AuDateAdapter, AU_DATE_FORMAT } from './au-date.adapter';
 
 const socketIoConfig: SocketIoConfig = { url: environment.baseApiUrl, options: {} };
-const AU_DATE_FORMAT = {
-  parse: {
-      dateInput: 'dd/MM/yyyy',
-  },
-  display: {
-      dateInput: 'dd/MM/yyyy',
-      monthYearLabel: 'MMM YYYY',
-      dateA11yLabel: 'LL',
-      monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 @NgModule({
   declarations: [
@@ -70,6 +60,10 @@ const AU_DATE_FORMAT = {
     {
       provide: MAT_DATE_FORMATS,
       useValue: AU_DATE_FORMAT
+    },
+    {
+      provide: DateAdapter,
+      useClass: AuDateAdapter
     }
   ],
   bootstrap: [AppComponent]

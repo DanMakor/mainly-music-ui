@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormBuilder, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidatorFn, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -19,7 +19,8 @@ import { Child } from '../child';
       useExisting: ChildInputComponent,
       multi: true
     }
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChildInputComponent implements OnInit, OnDestroy,ControlValueAccessor {
   private onDestroy$ = new Subject();
@@ -30,6 +31,7 @@ export class ChildInputComponent implements OnInit, OnDestroy,ControlValueAccess
     firstName: ["", Validators.required],
     lastName: ["", Validators.required],
     dateOfBirth: ["", Validators.required],
+    allergies: [""],
     hasBowl: [true, Validators.required]
   });
   

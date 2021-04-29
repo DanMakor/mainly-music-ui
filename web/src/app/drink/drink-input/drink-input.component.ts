@@ -101,7 +101,6 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
     ).pipe(takeUntil(this.onDestroy$)).subscribe();
     this.drinkForm.valueChanges.pipe(takeUntil(this.onDestroy$)).subscribe(drink => {
       if (this.onChange) { 
-        console.log(drink.type);
         this.onChange(drink.type === drinkType.none ? null : { ...drink, strength: drink.strength === "Full" ? null : drink.strength }); }
     });
   }
@@ -110,9 +109,7 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
     (_: AbstractControl) => this.drinkForm.errors
 
   writeValue(obj: any): void {
-    console.log(obj);
     const drink = obj && { ...obj, strength: !obj?.strength ? this.strengths[0] : obj?.strength };
-    console.log(drink);
     this.drinkForm.reset(drink ? drink : { type: drinkType.none }, { emitEvent: false });
     this.writeValue$.next(obj);
   }

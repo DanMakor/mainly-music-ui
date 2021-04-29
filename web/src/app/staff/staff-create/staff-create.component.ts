@@ -15,11 +15,7 @@ import { PersonService } from '../../person/person.service';
 export class StaffCreateComponent implements OnInit {
   private onDestroy$ = new Subject();
 
-  public staffMember = this.fb.group({
-    firstName: this.fb.control('', Validators.required),
-    lastName: this.fb.control('', Validators.required),
-    drink: this.fb.control('')
-  });
+  public staffMember = new FormControl(null, Validators.required);
   public saveClicked$ = new Subject();
 
   public persons$ = this.personService.attendees$;
@@ -33,7 +29,7 @@ export class StaffCreateComponent implements OnInit {
     tap(_ => this.router.navigate(['../'], { relativeTo: this.route }))
   )
 
-  constructor(private personService: PersonService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute) { }
+  constructor(private personService: PersonService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.saveGuardian$.pipe(takeUntil(this.onDestroy$)).subscribe();

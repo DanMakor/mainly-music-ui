@@ -37,7 +37,6 @@ export class DrinkEditComponent implements OnInit, OnDestroy {
 
   private updateDrink$ = this.saveDrinkClicked$.pipe(
     filter(_ => this.drink.valid),
-    tap(_ => console.log(this.drink.value)),
     exhaustMap(_ => this.personService.updateDrink(this.id, this.drink.value).pipe(
         catchAndContinue()
       )

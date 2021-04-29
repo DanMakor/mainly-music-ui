@@ -53,7 +53,7 @@ export class PersonService {
   );
 
   constructor(private http: HttpClient, private socket: Socket) {
-    this.socket.on('personupdated', (person: (Child | Guardian)) => {
+    this.socket.on('personupdated', (person: (Child | Guardian | Staff)) => {
       const persons = this.personsSubject$.getValue();
       this.personsSubject$.next(persons.map(p => p._id === person._id ? person : p))
     });
@@ -69,7 +69,7 @@ export class PersonService {
   }
 
   public updateDrink(personId: string, drink: Drink): Observable<Guardian> {
-    return this.http.post<Guardian>(`${this.url}/${personId}/drink`, { drink }).pipe(
+    return this.http.put<Guardian>(`${this.url}/${personId}/drink`, { drink }).pipe(
       tap(_ => {
         const persons = this.personsSubject$.getValue();
         this.socket.emit('personupdated', ({ ...persons.find(p => p._id === personId), drink: drink ? { ...drink } : null }))
@@ -78,10 +78,18 @@ export class PersonService {
   }
 
   public updateHasBowl(personId: string, hasBowl: boolean): Observable<Child> {
-    return this.http.post<Child>(`${this.url}/${personId}/hasBowl`, { hasBowl }).pipe(
+    return this.http.put<Child>(`${this.url}/${personId}/hasBowl`, { hasBowl }).pipe(
       tap(_ => {
         const persons = this.personsSubject$.getValue();
         this.socket.emit('personupdated', ({ ...persons.find(p => p._id === personId), hasBowl }))
+      })
+    );  
+  }
+
+  public updatePerson(personId: string, { _id, ...personWithNoId }: Child | Staff | Guardian) {
+    return this.http.put<any>(`${this.url}/${personId}`, personWithNoId).pipe(
+      tap(_ => {
+        this.socket.emit('personupdated', { _id, ...personWithNoId })
       })
     );  
   }

@@ -31,14 +31,10 @@ export class GuardianInputComponent implements OnInit {
     lastName: ["", Validators.required],
     relationshipToChild: [""],
     address: [""],
-    suburb: [""],
-    state: [""],
-    postcode: [""],
     phone: [""],
     email: ["", [Validators.email, Validators.required]],
     church: [""],
     drink: [""],
-    information: [""],
     emergencyContactName: [""],
     emergencyContactPhone: [""]
   });
