@@ -91,7 +91,7 @@ export class SessionService {
   ) {
     this.socket.on('sessionupdated', (session: Session) => {
       const sessions = this.sessionsSubject$.getValue();
-      this.sessionsSubject$.next({ ...sessions, [session._id]: session })
+      this.sessionsSubject$.next({ ...sessions, [session._id]: { ...session, date: new Date(session.date) } })
     });
 
     merge(
@@ -139,7 +139,7 @@ export class SessionService {
       tap(sessions => {
         const currentSessionsMap = this.sessionsSubject$.getValue();
         this.sessionsSubject$.next(
-          sessions.reduce((acc, sess) => ({ ...acc, [sess._id]: sess }), currentSessionsMap)
+          sessions.reduce((acc, sess) => ({ ...acc, [sess._id]: { ...sess, date: new Date(sess.date) } }), currentSessionsMap)
         );
       })
     )

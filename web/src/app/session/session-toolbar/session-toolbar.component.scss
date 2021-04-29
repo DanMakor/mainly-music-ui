@@ -1,8 +1,19 @@
-fa-icon {
+.chevron {
     font-size: 14px;
 }
 
 mat-toolbar {
     padding-left: 4rem;
     padding-right: 4rem;
+}
+
+.icon {
+    color: rgba(0, 0, 0, .6);
+    margin-right: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.text {
+    font-size: 1.5rem;
+    margin-right: 1.5rem;
 }

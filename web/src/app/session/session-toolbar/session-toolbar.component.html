@@ -1,10 +1,22 @@
 <ng-container *ngIf="{ currentTerm: currentTerm$ | async, currentSession: currentSession$ | async, showSidebar: showSidebar$ | async } as state">
-    <mat-toolbar *ngIf="state.currentTerm && state.showSidebar">
-        <button [routerLink]="['/terms', state.currentTerm._id]" mat-button>Term {{ state.currentTerm.termNumber  }}, {{ state.currentTerm.year }}</button>
-        <ng-container *ngIf="state.currentSession">
-            <fa-icon class="ml-2 mr-2" [icon]="['fas', 'chevron-right']"></fa-icon>
-            <button [routerLink]="['/terms', state.currentTerm._id, 'sessions', state.currentSession._id]" mat-button>{{ state.currentSession.date | date:'dd/MM/yyyy' }}</button>
-        </ng-container>
+    <mat-toolbar *ngIf="state.currentTerm && state.showSidebar" fxLayout="row" fxLayoutAlign="space-between center">
+        <div>
+            <button [routerLink]="['/terms', state.currentTerm._id]" mat-button>Term {{ state.currentTerm.termNumber  }}, {{ state.currentTerm.year }}</button>
+            <ng-container *ngIf="state.currentSession">
+                <fa-icon class="ml-2 mr-2 chevron" [icon]="['fas', 'chevron-right']"></fa-icon>
+                <button [routerLink]="['/terms', state.currentTerm._id, 'sessions', state.currentSession._id]" mat-button>{{ state.currentSession.date | date:'dd/MM/yyyy' }}</button>
+            </ng-container>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <span class="icon"><fa-icon [icon]="['fas', 'cookie']"></fa-icon></span>
+            <span class="text">{{ numberOfBowls$ | async }}</span>
+
+            <span class="icon"><fa-icon [icon]="['fas', 'baby']"></fa-icon></span>
+            <span class="text">{{ numberOfChildren$ | async }}</span>
+
+            <span class="icon"><fa-icon [icon]="['fas', 'user']"></fa-icon></span>
+            <span class="text">{{ numberOfGuardians$ | async }}</span>
+        </div>
     </mat-toolbar>
 </ng-container>
 

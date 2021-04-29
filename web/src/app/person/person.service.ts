@@ -54,6 +54,9 @@ export class PersonService {
 
   constructor(private http: HttpClient, private socket: Socket) {
     this.socket.on('personupdated', (person: (Child | Guardian | Staff)) => {
+      if (person.type === personType.child) {
+        person = { ...person, dateOfBirth: new Date((person as Child).dateOfBirth) }
+      }
       const persons = this.personsSubject$.getValue();
       this.personsSubject$.next(persons.map(p => p._id === person._id ? person : p))
     });
@@ -64,7 +67,9 @@ export class PersonService {
 
   public list(): Observable<(Child | Guardian)[]> {
     return this.http.get<(Child | Guardian)[]>(this.url).pipe(
-      tap(persons => this.personsSubject$.next(persons))
+      tap(persons => this.personsSubject$.next(
+        persons.map(p => (p as Child).dateOfBirth ? { ...p, dateOfBirth: new Date((p as Child).dateOfBirth) }: p))
+      )
     );
   }
 

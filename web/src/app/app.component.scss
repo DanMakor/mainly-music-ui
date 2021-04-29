@@ -4,9 +4,14 @@
 $primary: map-get($mm-app-theme, primary);
 $foreground: map-get($mm-app-theme, foreground);
 
-mat-sidenav {
+mat-sidenav.left {
     background-color: mat-color($primary) !important;
     color: white !important;
+    text-decoration: none;
+}
+
+mat-sidenav.right {
+    padding: 2rem;
 }
 
 a {

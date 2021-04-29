@@ -35,6 +35,7 @@ export class TermDetailsComponent implements OnInit {
   public currentTermSessions$ = combineLatest([this.termService.currentTerm$, this.sessionService.sessionsMap$]).pipe(
     map(([currentTerm, sessions]) => Object.values(sessions)
       .filter(s => s.termId === currentTerm?._id)
+      .sort((a, b) => b.date.getTime() - a.date.getTime())
       .map(ses => ({ _id: ses._id, count: ses.personIds?.length, date: ses.date }))
     )
   );
