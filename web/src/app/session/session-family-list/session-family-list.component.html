@@ -1,0 +1,6 @@
+<div [ngClass]="{ 'mt-2': !first }" *ngFor="let sessionFamily of sessionFamilies$ | async; let first=first">
+    <div *ngFor="let person of sessionFamily">
+        <fa-icon class="mr-2" [icon]="['fas', person.type === personType.child ? 'baby' : 'user']"></fa-icon> 
+        <span>{{ person.firstName }} {{ person.lastName }}</span>
+    </div>
+</div>

@@ -8,7 +8,8 @@ import { Session } from './session/session';
 import { SessionService } from './session/session.service';
 import { Term } from './session/term';
 import { TermService } from './session/term.service';
-import { SidenavService } from './sidenav.service';
+import { LeftSidenavService } from './left-sidenav.service';
+import { RightSidenavService } from './right-sidenav.service';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ import { SidenavService } from './sidenav.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  @ViewChild(MatSidenav, { static: true }) sidenav!: MatSidenav;
+  @ViewChild('leftSidenav', { static: true }) leftSidenav!: MatSidenav;
+  @ViewChild('rightSidenav', { static: true }) rightSidenav!: MatSidenav;
 
   private onDestroy$ = new Subject();
 
@@ -41,14 +43,21 @@ export class AppComponent {
     })
   );
 
-  constructor(private sidenavService: SidenavService, private loadingService: LoadingService, private sessionService: SessionService, private termService: TermService) {}
+  constructor(
+    private leftSidenavService: LeftSidenavService, 
+    private rightSidenavService: RightSidenavService,
+    private loadingService: LoadingService, 
+    private sessionService: SessionService, 
+    private termService: TermService
+  ) {}
 
   public ngOnInit(): void {
     this.setCurrentSessionIfThereIsASessionForToday$.pipe(takeUntil(this.onDestroy$)).subscribe();
   }
 
   ngAfterViewInit(): void {
-    this.sidenavService.setSidenav(this.sidenav)
+    this.leftSidenavService.setSidenav(this.leftSidenav)
+    this.rightSidenavService.setSidenav(this.rightSidenav)
   }
 
   ngOnDestroy(): void {

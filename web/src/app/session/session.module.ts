@@ -23,6 +23,7 @@ import { SessionToolbarComponent } from './session-toolbar/session-toolbar.compo
 import { SessionHomeAttendeesComponent } from './session-home-attendees/session-home-attendees.component';
 import { SessionHomeStaffComponent } from './session-home-staff/session-home-staff.component';
 import { StaffCreateComponent } from '../staff/staff-create/staff-create.component';
+import { SessionFamilyListComponent } from './session-family-list/session-family-list.component';
 
 const routes: Routes = [
   { path: "terms", component: TermHomeComponent },
@@ -67,7 +68,7 @@ const routes: Routes = [
     SessionDrinksComponent, 
     SessionBowlsComponent, 
     SessionPersonDrinksComponent, 
-    SessionToolbarComponent, SessionHomeAttendeesComponent, SessionHomeStaffComponent
+    SessionToolbarComponent, SessionHomeAttendeesComponent, SessionHomeStaffComponent, SessionFamilyListComponent
   ],
   imports: [
     SharedModule,
@@ -77,7 +78,8 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   exports: [
-    SessionToolbarComponent
+    SessionToolbarComponent,
+    SessionFamilyListComponent
   ]
 })
 export class SessionModule { }

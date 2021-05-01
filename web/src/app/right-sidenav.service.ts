@@ -4,7 +4,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 @Injectable({
   providedIn: 'root'
 })
-export class SidenavService {
+export class RightSidenavService {
   private sidenav: MatSidenav | undefined;
 
   public setSidenav(sidenav: MatSidenav) {

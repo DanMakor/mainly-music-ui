@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PersonService } from 'src/app/person/person.service';
+import { RightSidenavService } from 'src/app/right-sidenav.service';
 import { SessionService } from '../session.service';
 import { TermService } from '../term.service';
 import { SessionToolbarService } from './session-toolbar.service';
@@ -18,10 +19,11 @@ export class SessionToolbarComponent implements OnInit {
     private termService: TermService, 
     private sessionService: SessionService, 
     private sessionToolbarService: SessionToolbarService,
-    private personService: PersonService
+    private personService: PersonService,
+    private rightSidenavService: RightSidenavService
   ) { }
 
-  public showSidebar$ = this.sessionToolbarService.showSidebar$;
+  public showToolbar$ = this.sessionToolbarService.showToolbar$;
 
   public currentTerm$ = this.termService.currentTerm$
   public currentSession$ = combineLatest([this.termService.currentTerm$, this.sessionService.currentSession$]).pipe(
@@ -65,7 +67,10 @@ export class SessionToolbarComponent implements OnInit {
     })
   );
 
-  ngOnInit(): void {
+  toggleSidenav() {
+    this.rightSidenavService.toggle();
   }
 
+  ngOnInit(): void {
+  }
 }

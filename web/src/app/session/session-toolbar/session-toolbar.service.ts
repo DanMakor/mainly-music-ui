@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { RightSidenavService } from 'src/app/right-sidenav.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionToolbarService {
-  private showSidebarSubject = new BehaviorSubject(true);
-  public showSidebar$ = this.showSidebarSubject.asObservable();
+  private showToolbarSubject = new BehaviorSubject(true);
+  public showToolbar$ = this.showToolbarSubject.asObservable();
 
   constructor() { }
 
   public hide(): void {
-    this.showSidebarSubject.next(false);
+    this.showToolbarSubject.next(false);
 
   }
 
   public show(): void {
-    this.showSidebarSubject.next(true);
+    this.showToolbarSubject.next(true);
   }
 }

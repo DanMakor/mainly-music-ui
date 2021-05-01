@@ -3,7 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { combineLatest } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { PersonService } from 'src/app/person/person.service';
-import { SidenavService } from 'src/app/sidenav.service';
+import { LeftSidenavService } from 'src/app/left-sidenav.service';
 import { SessionToolbarService } from '../session-toolbar/session-toolbar.service';
 import { SessionService } from '../session.service';
 
@@ -17,7 +17,7 @@ export class SessionBirthdaysAndCertificatesComponent implements OnInit {
   constructor(
     private sessionService: SessionService, 
     private personService: PersonService, 
-    private sidenavService: SidenavService,
+    private leftSidenavService: LeftSidenavService,
     private sessionToolbarService: SessionToolbarService
   ) { }
 
@@ -31,11 +31,11 @@ export class SessionBirthdaysAndCertificatesComponent implements OnInit {
 
   ngOnInit(): void {
     this.sessionToolbarService.hide();
-    this.sidenavService.close();
+    this.leftSidenavService.close();
   }
 
   ngOnDestroy() {
     this.sessionToolbarService.show();
-    this.sidenavService.open();
+    this.leftSidenavService.open();
   }
 }

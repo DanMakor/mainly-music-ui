@@ -1,5 +1,5 @@
 <mat-sidenav-container class="mh-100">
-    <mat-sidenav class="left" mode="side" opened>
+    <mat-sidenav #leftSidenav class="left" mode="side" opened>
         <a routerLink=""><fa-icon [icon]="['fas', 'home']"></fa-icon></a>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -9,7 +9,7 @@
             <router-outlet></router-outlet>
         </div>
     </mat-sidenav-content>
-    <mat-sidenav class="right" position="end" mode="side" opened>
-        asdf
+    <mat-sidenav #rightSidenav class="right" position="end" mode="side">
+        <mm-session-family-list></mm-session-family-list>
     </mat-sidenav>
 </mat-sidenav-container>
