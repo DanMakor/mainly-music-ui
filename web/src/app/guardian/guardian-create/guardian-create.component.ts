@@ -28,10 +28,9 @@ export class GuardianCreateComponent implements OnInit {
   private saveGuardian$ = this.saveClicked$.pipe(
     filter(_ => this.guardian.valid && this.familyId.valid),
     exhaustMap(_ => this.personService.createGuardian(this.guardian.value, this.familyId.value).pipe(
+      tap(_ => this.router.navigate(['../'], { relativeTo: this.route })),
       catchAndContinue()
-    )),
-    filter(({ isError }) => !isError),
-    tap(_ => this.router.navigate(['../'], { relativeTo: this.route }))
+    ))
   )
 
   constructor(private personService: PersonService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute) { }

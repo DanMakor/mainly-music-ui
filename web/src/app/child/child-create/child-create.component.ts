@@ -26,10 +26,9 @@ export class ChildCreateComponent implements OnInit {
     filter(_ => this.child.valid && this.familyId.valid),
     withLatestFrom(this.allowPhotographs$),
     exhaustMap(([_, allowPhotographs]) => this.personService.createChild({ ...this.child.value, allowPhotographs }, this.familyId.value).pipe(
+      tap(_ => this.router.navigate(['../'], { relativeTo: this.route })),
       catchAndContinue()
-    )),
-    filter(({ isError }) => !isError),
-    tap(_ => this.router.navigate(['../'], { relativeTo: this.route }))
+    ))
   )
 
   constructor(private personService: PersonService, private router: Router, private route: ActivatedRoute) { }

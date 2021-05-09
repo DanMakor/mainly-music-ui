@@ -38,7 +38,7 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
     { name: "Latte", type: drinkType.coffee },
     { name: "Long Black", type: drinkType.coffee },
     { name: "Short Black", type: drinkType.coffee },
-    { name: "Dilmah (Black Tea)", type: drinkType.tea },
+    { name: "Standard Tea", type: drinkType.tea },
     { name: "Rooibos", type: drinkType.tea },
     { name: "Hot", type: drinkType.water },
     { name: "Cold", type: drinkType.water }

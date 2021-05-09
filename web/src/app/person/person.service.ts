@@ -44,6 +44,10 @@ export class PersonService {
     map(persons => persons.filter(person => person.type === personType.child) as Child[])
   )
 
+  public nonChildren$: Observable<(Staff | Guardian)[]> = this.persons$.pipe(
+    map(persons => persons.filter(person => person.type !== personType.child) as (Staff | Guardian)[])
+  );
+
   public families$: Observable<FamilyMap> = this.attendees$.pipe(
     map(persons => persons.reduce((acc, person) => acc[person.familyId] ? { 
         ...acc, 

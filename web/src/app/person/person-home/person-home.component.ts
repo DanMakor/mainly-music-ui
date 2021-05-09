@@ -22,10 +22,13 @@ export class PersonHomeComponent implements OnInit {
   public editPersonClicked$ = new Subject<Child | Guardian | Staff>();
 
   public persons$ = this.personService.persons$.pipe(
-    map(persons => persons.map(p => ({ 
-      ...p, 
-      icon: p.type === personType.child ? 'baby' as IconName : p.type === personType.guardian ? 'user' as IconName : 'user-secret' as IconName
-    })))
+    map(persons => persons
+        .sort((a, b) => b.lastName.localeCompare(a.lastName))
+        .map(p => ({ 
+          ...p, 
+          icon: p.type === personType.child ? 'baby' as IconName : p.type === personType.guardian ? 'user' as IconName : 'user-secret' as IconName
+        }))
+    )
   );
 
   private goToCreateFamily$ = this.createFamilyClicked$.pipe(

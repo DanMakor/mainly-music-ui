@@ -14,7 +14,7 @@ export class SessionDrinksComponent implements OnInit {
 
   constructor(private sessionService: SessionService, private personService: PersonService) { }
 
-  public drinkNamesAndCount$ = combineLatest([this.sessionService.currentSession$, this.personService.guardians$]).pipe(
+  public drinkNamesAndCount$ = combineLatest([this.sessionService.currentSession$, this.personService.nonChildren$]).pipe(
     map(([currentSession, guardians]) => Object.entries(guardians
       .filter(g => currentSession.personIds.includes(g._id) && g.drink)
       .reduce((acc, guardian) => { 

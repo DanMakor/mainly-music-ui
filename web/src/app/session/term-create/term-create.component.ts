@@ -37,10 +37,9 @@ export class TermCreateComponent implements OnInit {
   private saveAndGoBack$ = this.saveClicked$.pipe(
     filter(_ => this.term.valid),
     exhaustMap(_ => this.termService.create(this.term.value).pipe(
+      tap(_ => this.router.navigate(['../'], { relativeTo: this.route })),
       catchAndContinue()
-    )),
-    filter(({ isError }) => !isError),
-    tap(_ => this.router.navigate(['../'], { relativeTo: this.route }))
+    ))
   )
 
   constructor(

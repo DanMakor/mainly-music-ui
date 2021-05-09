@@ -26,10 +26,9 @@ export class FamilyCreateComponent implements OnInit {
       guardians: [this.guardian.value], 
       children: [{ ...this.child.value, allowPhotographs: this.allowPhotographs.value }]
     }).pipe(
+      tap(_ => this.router.navigate(['../', { relativeTo: this.route }])),
       catchAndContinue()
-    )),
-    filter(({ isError }) => !isError),
-    tap(_ => this.router.navigate(['../', { relativeTo: this.route }]))
+    ))
   )
 
   ngOnInit(): void {

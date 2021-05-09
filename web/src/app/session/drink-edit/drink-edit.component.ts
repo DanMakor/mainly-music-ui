@@ -38,11 +38,10 @@ export class DrinkEditComponent implements OnInit, OnDestroy {
   private updateDrink$ = this.saveDrinkClicked$.pipe(
     filter(_ => this.drink.valid),
     exhaustMap(_ => this.personService.updateDrink(this.id, this.drink.value).pipe(
-        catchAndContinue()
+      tap(_ => this.location.back()),
+      catchAndContinue()
       )
-    ),
-    filter(({ isError}) => !isError),
-    tap(_ => this.location.back())
+    )
   )
 
   constructor(
