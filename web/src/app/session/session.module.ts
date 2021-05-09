@@ -41,11 +41,11 @@ const routes: Routes = [
           { path: "", component: SessionReportsComponent },
           { 
             path: 'counter', 
-            component: SessionHomeComponent,
             children: [
-              { path: 'createChild', component: ChildCreateComponent },
-              { path: 'createGuardian', component: GuardianCreateComponent },
-              { path: 'createStaff', component: StaffCreateComponent },
+              { path: "", component: SessionHomeComponent },
+              { path: 'childCreate', component: ChildCreateComponent },
+              { path: 'guardianCreate', component: GuardianCreateComponent },
+              { path: 'staffCreate', component: StaffCreateComponent },
               { path: ':personId', component: DrinkEditComponent }
             ]
           },
