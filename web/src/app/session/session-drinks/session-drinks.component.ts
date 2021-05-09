@@ -24,12 +24,12 @@ export class SessionDrinksComponent implements OnInit {
     )
   );
 
-  public currentSessionStaffMembers$ = combineLatest([this.sessionService.currentSession$, this.personService.staffMembers$]).pipe(
-    map(([currentSession, staffMembers]) => staffMembers
-      .filter(staffMember => currentSession.personIds.includes(staffMember._id))
-      .map(staffMember => ({ ...staffMember, drink: getDisplayNameForDrink(staffMember.drink) }))
-    )
-  );
+  // public currentSessionStaffMembers$ = combineLatest([this.sessionService.currentSession$, this.personService.staffMembers$]).pipe(
+  //   map(([currentSession, staffMembers]) => staffMembers
+  //     .filter(staffMember => currentSession.personIds.includes(staffMember._id))
+  //     .map(staffMember => ({ ...staffMember, drink: getDisplayNameForDrink(staffMember.drink) }))
+  //   )
+  // );
 
   ngOnInit(): void {
   }
