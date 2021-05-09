@@ -39,15 +39,20 @@ const routes: Routes = [
         canActivate: [SessionGuard],
         children: [
           { path: "", component: SessionReportsComponent },
-          { path: 'createChild', component: ChildCreateComponent },
-          { path: 'createGuardian', component: GuardianCreateComponent },
-          { path: 'createStaff', component: StaffCreateComponent },
-          { path: 'counter', component: SessionHomeComponent },
+          { 
+            path: 'counter', 
+            component: SessionHomeComponent,
+            children: [
+              { path: 'createChild', component: ChildCreateComponent },
+              { path: 'createGuardian', component: GuardianCreateComponent },
+              { path: 'createStaff', component: StaffCreateComponent },
+              { path: ':personId', component: DrinkEditComponent }
+            ]
+          },
           { path: 'birthdays', component: SessionBirthdaysAndCertificatesComponent },
           { path: 'bowls', component: SessionBowlsComponent },
           { path: 'drinks', component: SessionDrinksComponent },
-          { path: 'personDrinks', component: SessionPersonDrinksComponent },
-          { path: ':personId', component: DrinkEditComponent }
+          { path: 'personDrinks', component: SessionPersonDrinksComponent }
         ] 
       }
     ]

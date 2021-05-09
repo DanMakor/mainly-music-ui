@@ -44,7 +44,7 @@ export function getDisplayNameForDrink(drink: Drink): string {
         displayName += drink.name + ' '; 
     }
 
-    if (drink.milk === "Soy" || drink.milk === "No Milk" || drink.milk === "My own milk") {
+    if (drink.type === drinkType.tea) {
         displayName += 'with ' + drink.milk
     }
 
