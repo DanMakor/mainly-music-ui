@@ -23,7 +23,7 @@ export class PersonHomeComponent implements OnInit {
 
   public persons$ = this.personService.persons$.pipe(
     map(persons => persons
-        .sort((a, b) => b.lastName.localeCompare(a.lastName))
+        .sort((a, b) => a.lastName.localeCompare(b.lastName))
         .map(p => ({ 
           ...p, 
           icon: p.type === personType.child ? 'baby' as IconName : p.type === personType.guardian ? 'user' as IconName : 'user-secret' as IconName
