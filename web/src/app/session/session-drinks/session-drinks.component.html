@@ -1,7 +1,6 @@
 
 <div fxLayout="row">
     <div fxFlex="50" >
-        <h1 class="mb-2">Attendees</h1>
         <div class="mb-2" fxLayout="row" fxLayoutAlign="start center" *ngFor="let entry of drinkNamesAndCount$ | async">
             <mat-checkbox>{{ entry[0] }}</mat-checkbox><h1>{{ entry[1] }}</h1>
         </div>
