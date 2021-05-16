@@ -16,7 +16,6 @@ import { TermGuard } from './term.guard';
 import { SessionGuard } from './session.guard';
 import { SessionBirthdaysAndCertificatesComponent } from './session-birthdays-and-certificates/session-birthdays-and-certificates.component';
 import { SessionDrinksComponent } from './session-drinks/session-drinks.component';
-import { SessionBowlsComponent } from './session-bowls/session-bowls.component';
 import { SessionReportsComponent } from './session-reports/session-reports.component';
 import { SessionPersonDrinksComponent } from './session-person-drinks/session-person-drinks.component';
 import { SessionToolbarComponent } from './session-toolbar/session-toolbar.component';
@@ -50,7 +49,6 @@ const routes: Routes = [
             ]
           },
           { path: 'birthdays', component: SessionBirthdaysAndCertificatesComponent },
-          { path: 'bowls', component: SessionBowlsComponent },
           { path: 'drinks', component: SessionDrinksComponent },
           { path: 'personDrinks', component: SessionPersonDrinksComponent }
         ] 
@@ -71,7 +69,6 @@ const routes: Routes = [
     SessionReportsComponent, 
     SessionBirthdaysAndCertificatesComponent, 
     SessionDrinksComponent, 
-    SessionBowlsComponent, 
     SessionPersonDrinksComponent, 
     SessionToolbarComponent, SessionHomeAttendeesComponent, SessionHomeStaffComponent, SessionFamilyListComponent
   ],

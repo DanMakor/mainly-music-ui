@@ -27,7 +27,7 @@
             </div>
         </ng-container>
 
-    <ng-container *ngIf="(strengths$ | async) as strengths">
+        <ng-container *ngIf="(strengths$ | async) as strengths">
             <div class="mt-2" *ngIf="strengths.length">
                 <h4>Strength</h4>
                 <mat-button-toggle-group formControlName="strength" aria-label="Select a milk">
@@ -35,5 +35,12 @@
                 </mat-button-toggle-group>
             </div>
         </ng-container>
+    </div>
+
+    <div fxLayout="row">
+        <mat-form-field fxFlex="50" class="mt-2" appearance="fill">
+            <mat-label>Notes</mat-label>
+            <textarea matInput formControlName="notes" placeholder="Ex. I want a piccolo latte and I want it now"></textarea>
+        </mat-form-field>
     </div>
 </form>

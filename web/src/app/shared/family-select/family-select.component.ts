@@ -74,8 +74,8 @@ export class FamilySelectComponent implements OnInit, ControlValueAccessor {
 
   private familySelected$ = this.familyInput.valueChanges.pipe(
     tap(({ key }) => !key ? this.familyInput.setErrors({ required: true }) : this.familyInput.setErrors(null)),
-    distinctUntilChanged(({ key }) => key),
     tap(({ key }) => this.onChange && this.onChange(key)),
+    filter(({ value }) => value),
     tap(({ value }) => this.allowPhotographs.emit(value.find((p: any) => p.allowPhotographs !== undefined).allowPhotographs))
   );
 

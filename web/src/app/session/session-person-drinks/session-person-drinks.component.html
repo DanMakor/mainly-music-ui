@@ -2,6 +2,7 @@
 <div fxLayout="row wrap" fxLayoutGap="0.5rem">
     <div class="mb-3" fxFlex="0 1 calc(33% - 0.5rem)" *ngFor="let entry of drinkNamesAndCount$ | async">
         <h1><fa-icon [icon]="['fas', 'coffee']" class="mr-1"></fa-icon>{{ entry[0] }}</h1>
-        <mat-checkbox *ngFor="let name of entry[1]" class="mr-2">{{ name }}</mat-checkbox>
+        <mat-checkbox (change)="checkboxClicked$.next({ _id: person._id, delivered: $event.checked })" 
+            [checked]="person.delivered" *ngFor="let person of entry[1]" class="mr-2">{{ person.name }}</mat-checkbox>
     </div>
 </div>

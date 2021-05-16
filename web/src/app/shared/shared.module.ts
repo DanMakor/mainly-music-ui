@@ -23,6 +23,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [FamilySelectComponent, ConfirmationModalComponent],
@@ -56,6 +57,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatMenuModule,
     MatTabsModule,
     MatToolbarModule,
+    MatTooltipModule,
     FlexLayoutModule,
 
     FamilySelectComponent,

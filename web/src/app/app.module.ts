@@ -8,7 +8,7 @@ import { SessionModule } from './session/session.module';
 import { HomeComponent } from './home/home.component';
 import { SharedModule } from './shared/shared.module';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faAward, faBaby, faBan, faBirthdayCake, faCamera, faCheck, faChevronRight, faClipboard, faCoffee, faCookie, faHome, faMoneyBill, faPlus, faSignOutAlt, faSpinner, faUser, faUserSecret } from '@fortawesome/free-solid-svg-icons';
+import { faAward, faBaby, faBan, faBirthdayCake, faCamera, faCheck, faChevronRight, faClipboard, faCoffee, faCookie, faHome, faMoneyBill, faPlus, faSignOutAlt, faSpinner, faUser, faUserSecret, faUserTie } from '@fortawesome/free-solid-svg-icons';
 import { PersonModule } from './person/person.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -84,7 +84,8 @@ export class AppModule {
       faBirthdayCake,
       faAward, 
       faCookie, 
-      faCoffee, 
+      faCoffee,
+      faUserTie, 
       faChevronRight,
       faClipboard,
       faCamera,

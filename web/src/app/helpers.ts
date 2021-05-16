@@ -44,8 +44,12 @@ export function getDisplayNameForDrink(drink: Drink): string {
         displayName += drink.name + ' '; 
     }
 
-    if (drink.type === drinkType.tea) {
-        displayName += 'with ' + drink.milk
+    if (drink.type === drinkType.tea || drink.milk !== "Full Cream" && !!drink.milk) {
+        displayName += 'with ' + drink.milk;
+    }
+
+    if (drink.notes && drink.notes.trim()) {
+        displayName += ' ' + drink.notes;
     }
 
     return displayName;

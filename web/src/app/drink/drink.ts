@@ -5,4 +5,5 @@ export interface Drink {
     name: string;
     strength: string;
     milk: string;
+    notes: string;
 }

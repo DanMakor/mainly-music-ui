@@ -1,10 +1,21 @@
 <ng-container *ngIf="{ currentTerm: currentTerm$ | async, currentSession: currentSession$ | async, showToolbar: showToolbar$ | async } as state">
     <mat-toolbar *ngIf="state.currentTerm && state.showToolbar" fxLayout="row" fxLayoutAlign="space-between center">
-        <div>
-            <button [routerLink]="['/terms', state.currentTerm._id]" mat-button>Term {{ state.currentTerm.termNumber  }}, {{ state.currentTerm.year }}</button>
+        <div class="term-and-session">
+            Term {{ state.currentTerm.termNumber  }}, {{ state.currentTerm.year }} - 
             <ng-container *ngIf="state.currentSession">
-                <fa-icon class="ml-2 mr-2 chevron" [icon]="['fas', 'chevron-right']"></fa-icon>
-                <button [routerLink]="['/terms', state.currentTerm._id, 'sessions', state.currentSession._id]" mat-button>{{ state.currentSession.date | date:'dd/MM/yyyy' }}</button>
+                {{ state.currentSession.date | date:'dd/MM/yyyy' }}
+                <a class="ml-2" mat-mini-fab [routerLink]="['/terms', state.currentTerm._id, 'sessions', state.currentSession._id]" matTooltip="Session home" color="accent" aria-label="Home">
+                    <fa-icon [icon]="['fas', 'home']"></fa-icon>
+                </a>
+                <a class="ml-2" mat-mini-fab [routerLink]="['/terms', state.currentTerm._id, 'sessions', state.currentSession._id, 'counter']" matTooltip="Front desk" color="accent" aria-label="Front Desk">
+                    <fa-icon [icon]="['fas', 'clipboard']"></fa-icon>
+                </a>
+                <a class="ml-2" mat-mini-fab [routerLink]="['/terms', state.currentTerm._id, 'sessions', state.currentSession._id, 'personDrinks']" matTooltip="Drinks for servers" color="accent" aria-label="Drinks for servers">
+                    <fa-icon [icon]="['fas', 'user-tie']"></fa-icon>
+                </a>
+                <a class="ml-2" mat-mini-fab [routerLink]="['/terms', state.currentTerm._id, 'sessions', state.currentSession._id, 'drinks']" matTooltip="Drinks for Bill and Alan" color="accent" aria-label="Drinks for Bill and Alan">
+                    <fa-icon [icon]="['fas', 'coffee']"></fa-icon>
+                </a>
             </ng-container>
         </div>
         <div fxLayout="row" fxLayoutAlign="center center">

@@ -61,7 +61,8 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
     type: ["", Validators.required],
     name: ["", Validators.required],
     strength: [this.strengths[0], Validators.required], 
-    milk: [this.milkTypes[0], Validators.required]
+    milk: [this.milkTypes[0], Validators.required],
+    notes: [""]
   });
 
   private resetDrinkName$ = (this.drinkForm.get('type') as FormControl).valueChanges.pipe(
@@ -84,7 +85,13 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
       ? this.milkTypes.filter(mt => mt.type === drinkType.tea ? mt.type === type : true).map(({ name }) => name) 
       : []
     ),
-    tap(milks => !milks.length && this.drinkForm.get('milk')?.reset(this.milkTypes[0], { emitEvent: false }))
+    tap(milks => {
+      if (!milks.length) {
+        this.drinkForm.get('milk')?.reset(null, { emitEvent: false })
+      } else if (!milks.includes(this.drinkForm.get('milk')?.value)) {
+        this.drinkForm.get('milk')?.reset(this.milkTypes[0].name, { emitEvent: false });
+      }
+    })
   );
 
   public strengths$ = merge((this.drinkForm.get('type') as FormControl).valueChanges, this.writeType$).pipe(
