@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { combineLatest, merge, ReplaySubject, Subject } from 'rxjs';
-import { map, share, take, takeUntil, tap } from 'rxjs/operators';
+import { map, share, startWith, take, takeUntil, tap } from 'rxjs/operators';
 import { PersonForDisplay } from 'src/app/person/person-for-display';
 import { personType } from 'src/app/person/person-type';
 import { SearchService } from '../search.service';
@@ -45,12 +45,8 @@ export class SessionHomeAttendeesComponent implements OnInit {
     tap(searchString => this.input.setValue(searchString, { emitEvent: false }))
   );
 
-  public filteredFamilies$ = combineLatest([this.familiesMap$, this.searchService.searchString$]).pipe(
+  public filteredFamilies$ = combineLatest([this.familiesMap$, this.searchService.searchString$.pipe(startWith(""))]).pipe(
     map(([familyMap, filterString]) => {
-      if (!filterString) {
-        return [];
-      }
-
       const filterStrings = filterString.split(' ');
       return Object.values(familyMap)
         .filter(persons => persons.some(person => this.personMatchesFilterString(filterStrings, person)))

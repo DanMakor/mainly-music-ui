@@ -5,7 +5,7 @@
 
 <div fxLayout="row" fxLayoutAlign="space-between">
     <button class="mr-1" mat-raised-button color="primary" [matMenuTriggerFor]="addVisitor">
-        <fa-icon class="mr-1" [icon]="['fas', 'plus']"></fa-icon>Add Visitor
+        <fa-icon class="mr-1" [icon]="['fas', 'plus']"></fa-icon>Add People
     </button>
     <mat-menu #addVisitor="matMenu">
         <button routerLink="./guardianCreate" mat-menu-item>
@@ -13,6 +13,9 @@
         </button>
         <button routerLink="./childCreate" mat-menu-item>
             <fa-icon [icon]="['fas', 'baby']" class="mr-1"></fa-icon>Child
+        </button>
+        <button routerLink="./familyCreate" mat-menu-item>
+            <fa-icon [icon]="['fas', 'users']" class="mr-1"></fa-icon>Family
         </button>
     </mat-menu>
 </div>

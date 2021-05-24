@@ -23,6 +23,7 @@ import { SessionHomeAttendeesComponent } from './session-home-attendees/session-
 import { SessionHomeStaffComponent } from './session-home-staff/session-home-staff.component';
 import { StaffCreateComponent } from '../staff/staff-create/staff-create.component';
 import { SessionFamilyListComponent } from './session-family-list/session-family-list.component';
+import { FamilyCreateComponent } from '../person/family-create/family-create.component';
 
 const routes: Routes = [
   { path: "terms", component: TermHomeComponent },
@@ -42,6 +43,7 @@ const routes: Routes = [
             path: 'counter', 
             children: [
               { path: "", component: SessionHomeComponent },
+              { path: 'familyCreate', component: FamilyCreateComponent },
               { path: 'childCreate', component: ChildCreateComponent },
               { path: 'guardianCreate', component: GuardianCreateComponent },
               { path: 'staffCreate', component: StaffCreateComponent },

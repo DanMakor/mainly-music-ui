@@ -1,8 +1,18 @@
 
 <div fxLayout="row">
-    <div fxFlex="30" class="p-5">
+    <div fxFlex="30" [formGroup]="childrenForm" class="p-5">
         <h2>Add Children</h2>
-        <mm-child-input [formControl]="child"></mm-child-input>
+        <div formArrayName="children">
+            <div *ngFor="let child of children.controls; let i = index; let last=last">
+                <p fxLayout="row" fxLayoutAlign="space-between center" class="light">
+                    {{ i + 1 }}. 
+                    <button *ngIf="i > 0" (click)="removeChildClicked$.next(i)" mat-button class="close"><fa-icon [icon]="['fas', 'times']"></fa-icon></button>
+                </p>
+                <mm-child-input [formControlName]="i"></mm-child-input>
+                <mat-divider class="mt-2 mb-2" *ngIf="!last"></mat-divider>
+            </div>
+        </div>
+        <button mat-button mat-raised-button color="primary" (click)="addChildClicked$.next()">Add Child</button>
     </div>
     <mat-divider [vertical]="true"></mat-divider>
     <div fxFlex="70" class="p-5">

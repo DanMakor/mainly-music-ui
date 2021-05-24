@@ -46,7 +46,7 @@ export class DrinkInputComponent implements OnInit, OnDestroy, ControlValueAcces
 
   public readonly milkTypes = [
     { name: "Full Cream", type: drinkType.coffee },
-    { name: "Soy", type: drinkType.coffee },
+    { name: "Almond", type: drinkType.coffee },
     { name: "No Milk", type: drinkType.tea },
     { name: "My own milk", type: drinkType.coffee }
   ];
