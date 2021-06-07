@@ -54,3 +54,31 @@ export function getDisplayNameForDrink(drink: Drink): string {
 
     return displayName;
 }
+
+export function getOrderBasedOnDrinks(drinkOne: { drink: Drink }, drinkTwo: { drink: Drink }) {
+    return getDrinkOrderValue(drinkTwo.drink) - getDrinkOrderValue(drinkOne.drink)
+}
+
+function getDrinkOrderValue(drink: Drink) {
+    let drinkValue = 1;
+
+    if (drink === null) {
+        return drinkValue;
+    }
+
+    if (drink.type === drinkType.hotChoc) {
+        drinkValue = 7;
+    } else if (drink.name.includes("Cappuccino")) {
+        drinkValue = 6;
+    } else if (drink.name.includes("Flat White")) {
+        drinkValue = 5;
+    } else if (drink.type === drinkType.coffee) {
+        drinkValue = 4;
+    } else if (drink.type === drinkType.tea) {
+        drinkValue = 3;
+    } else if (drink.type === drinkType.water) {
+        drinkValue = 2;
+    }
+    
+    return drinkValue;
+}

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { combineLatest, Subject } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
 import { Guardian } from 'src/app/guardian/guardian';
-import { getDisplayNameForDrink } from 'src/app/helpers';
+import { getDisplayNameForDrink, getOrderBasedOnDrinks } from 'src/app/helpers';
 import { PersonService } from 'src/app/person/person.service';
 import { Staff } from 'src/app/staff/staff';
 import { SessionService } from '../session.service';
@@ -20,6 +20,7 @@ export class SessionPersonDrinksComponent implements OnInit {
   public drinkNamesAndCount$ = combineLatest([this.sessionService.currentSession$, this.personService.nonChildren$]).pipe(
     map(([currentSession, guardians]) => Object.entries(guardians
       .filter(g => currentSession.personIds.includes(g._id) && g.drink)
+      .sort(getOrderBasedOnDrinks)
       .reduce((acc, guardian) => { 
         const drinkDisplayName = getDisplayNameForDrink(guardian.drink);
         const guardianName =  guardian.firstName + ' ' + guardian.lastName;
