@@ -59,7 +59,6 @@ export class SessionService {
       const birthdaysMap = children.reduce((acc, child) => ({ ...acc, [child._id]: birthdayIsBetweenSessions(child.dateOfBirth, currentSession.date, previousSessionDate)}), {} as { [key: string]: boolean });
       return { sessionId: currentSession._id, birthdaysMap };
     }),
-    tap(({ birthdaysMap }) => console.log(birthdaysMap)),
     share()
   );
 

@@ -1,0 +1,6 @@
+<mat-list>
+    <mat-list-item *ngFor="let child of children$ | async">
+        <div mat-line>{{ child.firstName }} {{ child.lastName }}</div>
+        <div mat-line>{{ child.dateOfBirth | date:'d MMMM' }}</div>
+    </mat-list-item>
+</mat-list>

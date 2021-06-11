@@ -12,9 +12,11 @@ import { StaffModule } from '../staff/staff.module';
 import { GuardianEditComponent } from '../guardian/guardian-edit/guardian-edit.component';
 import { StaffEditComponent } from '../staff/staff-edit/staff-edit.component';
 import { ChildEditComponent } from '../child/child-edit/child-edit.component';
+import { PersonBirthdaysComponent } from './person-birthdays/person-birthdays.component';
 
 const routes: Routes = [
   { path: 'persons', component: PersonHomeComponent },
+  { path: 'persons/birthdays', component: PersonBirthdaysComponent },
   { path: 'persons/createFamily', component: FamilyCreateComponent },
   { path: 'persons/createGuardian', component: GuardianCreateComponent },
   { path: 'persons/createChild', component: ChildCreateComponent },
@@ -28,7 +30,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [PersonHomeComponent, FamilyCreateComponent],
+  declarations: [PersonHomeComponent, FamilyCreateComponent, PersonBirthdaysComponent],
   imports: [
     SharedModule,
     ChildModule,

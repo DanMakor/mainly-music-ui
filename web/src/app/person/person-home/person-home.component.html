@@ -1,5 +1,5 @@
 <button class="mr-1" mat-raised-button (click)="createFamilyClicked$.next()" color="primary">Create Family</button>
-<button mat-raised-button color="accent" [matMenuTriggerFor]="addVisitor">
+<button mat-raised-button class="mr-1" color="accent" [matMenuTriggerFor]="addVisitor">
     <fa-icon class="mr-1" [icon]="['fas', 'plus']"></fa-icon>Add Person
 </button>
 <mat-menu #addVisitor="matMenu">
@@ -13,6 +13,9 @@
         <fa-icon [icon]="['fas', 'user-secret']" class="mr-1"></fa-icon>Staff
     </button>
 </mat-menu>
+<button mat-raised-button routerLink="./birthdays">
+    Birthdays
+</button>
 
 <mat-nav-list>
     <a (click)="editPersonClicked$.next(person)" mat-list-item *ngFor="let person of persons$ | async">
