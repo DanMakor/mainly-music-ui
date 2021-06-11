@@ -82,13 +82,3 @@ function getDrinkOrderValue(drink: Drink) {
     
     return drinkValue;
 }
-
-export function nullableDateCompare(a: Date, b: Date): number {
-    if (!a) {
-        return 1; 
-    } else if (!b) {
-        return -1;
-    } else {
-        return b.getTime() - a.getTime();
-    }
-}
