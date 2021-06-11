@@ -51,13 +51,15 @@ export class SessionService {
       const sessions = Object.values(sessionsMap);
       const sortedSessions = sessions.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       const index = sortedSessions.findIndex(s => s._id === currentSession._id);
-      const previousSessionDate = index === 0 || terms.find(t => t._id === sortedSessions[index].termId)?.termNumber !== 4 ? 
+      // If the previous session is in term 4 and the current session is not in term 4, just go back two weeks don't check the whole school holidays...
+      const previousSessionDate = index === 0 || (terms.find(t => t._id === sortedSessions[index - 1].termId)?.termNumber === 4 && currentSession.termNumber !== 4) ? 
         addDays(currentSession.date, -14) :
         sortedSessions[index - 1].date;
 
       const birthdaysMap = children.reduce((acc, child) => ({ ...acc, [child._id]: birthdayIsBetweenSessions(child.dateOfBirth, currentSession.date, previousSessionDate)}), {} as { [key: string]: boolean });
       return { sessionId: currentSession._id, birthdaysMap };
     }),
+    tap(({ birthdaysMap }) => console.log(birthdaysMap)),
     share()
   );
 
