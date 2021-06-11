@@ -89,6 +89,6 @@ export function nullableDateCompare(a: Date, b: Date): number {
     } else if (!b) {
         return -1;
     } else {
-        return a.getTime() - b.getTime();
+        return b.getTime() - a.getTime();
     }
 }

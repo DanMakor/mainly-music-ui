@@ -24,7 +24,7 @@ export class PersonBirthdaysComponent implements OnInit {
       if (zeroedBYear) {
         zeroedBYear.setFullYear(0);
       }
-      return nullableDateCompare(zeroedAYear, zeroedBYear)
+      return nullableDateCompare(zeroedBYear, zeroedAYear)
     }))
   );
 
