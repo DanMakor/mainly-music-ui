@@ -15,7 +15,17 @@ export class PersonBirthdaysComponent implements OnInit {
   constructor(private personService: PersonService) { }
 
   public children$ = this.personService.children$.pipe(
-    map(children => children.sort((a, b) => nullableDateCompare(a.dateOfBirth, b.dateOfBirth)))
+    map(children => children.sort((a, b) => {
+      const zeroedAYear = a.dateOfBirth || new Date(a.dateOfBirth);
+      if (zeroedAYear) {
+        zeroedAYear.setFullYear(0);
+      }
+      const zeroedBYear = b.dateOfBirth || new Date(b.dateOfBirth);
+      if (zeroedBYear) {
+        zeroedBYear.setFullYear(0);
+      }
+      return nullableDateCompare(zeroedAYear, zeroedBYear)
+    }))
   );
 
   ngOnInit(): void {
