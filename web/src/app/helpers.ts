@@ -1,3 +1,5 @@
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
 import { Drink } from './drink/drink';
 import { drinkType } from './drink/drink-input/drink-type';
 
@@ -82,3 +84,54 @@ function getDrinkOrderValue(drink: Drink) {
     
     return drinkValue;
 }
+
+export function getFormGroupValidator(formGroup: FormGroup): ValidatorFn { 
+    return (_: AbstractControl) => {
+        return Object.keys(formGroup.controls).reduce((acc: ({ [k: string]: ValidationErrors } | null), key) => {
+            const ctrl = formGroup.get(key) as FormControl;
+            if (ctrl.errors && !acc) {
+                return { [key]: ctrl.errors }
+            } else if (ctrl.errors && acc) {
+                return { ...acc, [key]: ctrl.errors }
+            } else {
+                return acc;
+            }
+        }, null);
+    };
+}
+
+/**
+ * Extract arguments of function
+ */
+ export type ArgumentsType<F> = F extends (...args: infer A) => any ? A : never;
+
+ /**
+  * Creates an object like O. Optionally provide minimum set of properties P which the objects must share to conform
+  */
+ type ObjectLike<O extends object, P extends keyof O = keyof O> = Pick<O, P>;
+ 
+ /** 
+  * Extract a touched changed observable from an abstract control
+  * @param control AbstractControl like object with markAsTouched method
+  */
+ export const extractTouchedChanges = (control: ObjectLike<AbstractControl, 'markAsTouched' | 'markAsUntouched'>): Observable<boolean> => {
+   const prevMarkAsTouched = control.markAsTouched;
+   const prevMarkAsUntouched = control.markAsUntouched;
+ 
+   const touchedChanges$ = new Subject<boolean>();
+ 
+   function nextMarkAsTouched(...args: ArgumentsType<AbstractControl['markAsTouched']>) {
+     touchedChanges$.next(true);
+     prevMarkAsTouched.bind(control)(...args);
+   }
+ 
+   function nextMarkAsUntouched(...args: ArgumentsType<AbstractControl['markAsUntouched']>) {
+     touchedChanges$.next(false);
+     prevMarkAsUntouched.bind(control)(...args);
+   }
+   
+   control.markAsTouched = nextMarkAsTouched;
+   control.markAsUntouched = nextMarkAsUntouched;
+ 
+   return touchedChanges$;
+ }

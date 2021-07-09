@@ -43,6 +43,7 @@ export class FamilyCreateComponent implements OnInit {
   constructor(private personService: PersonService, private router: Router, private route: ActivatedRoute) {}
 
   private createFamily$ = this.saveClicked$.pipe(
+    filter(_ => this.guardian.valid && this.children.valid),
     switchMap(_ => this.personService.createFamily({ 
       guardians: [this.guardian.value], 
       children: this.children.value.map((child: Child) => ({ ...child, allowPhotographs: this.allowPhotographs.value }))
@@ -50,13 +51,22 @@ export class FamilyCreateComponent implements OnInit {
       tap(_ => this.router.navigate(['../'], { relativeTo: this.route })),
       catchAndContinue()
     ))
-  )
+  );
+
+  private markAsTouched$ = this.saveClicked$.pipe(
+    filter(_ => !this.guardian.valid || !this.children.valid),
+    tap(_ => { 
+      this.guardian.markAsTouched();
+      this.children.markAllAsTouched();
+    })
+  );
 
   ngOnInit(): void {
     merge(
       this.addChild$,
       this.createFamily$,
-      this.removeChild$
+      this.removeChild$,
+      this.markAsTouched$
     ).pipe(takeUntil(this.onDestroy$)).subscribe();
   }
 

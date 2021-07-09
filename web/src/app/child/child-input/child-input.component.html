@@ -1,4 +1,4 @@
-<form [formGroup]="childForm">
+<form [formGroup]="form">
     <mat-form-field appearance="fill">
         <mat-label>First Name</mat-label>
         <input matInput formControlName="firstName" placeholder="Ex. John">
@@ -16,7 +16,7 @@
         <input matInput formControlName="dateOfBirth" [matDatepicker]="picker">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-        <mat-error> Date of Birth is required</mat-error>
+        <mat-error> Unfortunately, that is not a valid date</mat-error>
     </mat-form-field>
 
     

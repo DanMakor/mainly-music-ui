@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { merge, Subject } from 'rxjs';
 import { tap, filter, exhaustMap, takeUntil } from 'rxjs/operators';
 import { PersonService } from 'src/app/person/person.service';
 import { catchAndContinue } from 'src/app/shared/catch-and-continue';
@@ -31,12 +31,23 @@ export class GuardianCreateComponent implements OnInit {
       tap(_ => this.router.navigate(['../'], { relativeTo: this.route })),
       catchAndContinue()
     ))
-  )
+  );
+
+  private markAsTouched$ = this.saveClicked$.pipe(
+    filter(_ => !this.guardian.valid || !this.familyId.valid),
+    tap(_ => { 
+      this.guardian.markAllAsTouched();
+      this.familyId.markAsTouched();
+    })
+  );
 
   constructor(private personService: PersonService, private router: Router, private fb: FormBuilder, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.saveGuardian$.pipe(takeUntil(this.onDestroy$)).subscribe();
+    merge(
+      this.saveGuardian$,
+      this.markAsTouched$
+    ).pipe(takeUntil(this.onDestroy$)).subscribe();
   }
 
   ngOnDestroy(): void {

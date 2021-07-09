@@ -1,22 +1,17 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormControl, ValidatorFn, AbstractControl } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Optional, Output, Self } from '@angular/core';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, FormControl, ValidatorFn, AbstractControl, NgControl } from '@angular/forms';
 import { combineLatest, merge, Observable, ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, startWith, take, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, pluck, startWith, take, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
 import { Child } from 'src/app/child/child';
 import { Guardian } from 'src/app/guardian/guardian';
+import { extractTouchedChanges } from 'src/app/helpers';
 import { personType } from 'src/app/person/person-type';
 
 @Component({
   selector: 'mm-family-select',
   templateUrl: './family-select.component.html',
   styleUrls: ['./family-select.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: FamilySelectComponent,
-      multi: true
-    }
-  ],
+  providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FamilySelectComponent implements OnInit, ControlValueAccessor {
@@ -28,7 +23,7 @@ export class FamilySelectComponent implements OnInit, ControlValueAccessor {
   public onChange: ((_: any) => void) | undefined;
   public onTouched: (() => void) | undefined;
 
-  private writeValue$ =  new Subject<string>();
+  private writeValue$ =  new ReplaySubject<string>(1);
 
   private persons$ = new ReplaySubject<(Child | Guardian)[]>(1);
 
@@ -73,7 +68,6 @@ export class FamilySelectComponent implements OnInit, ControlValueAccessor {
   )
 
   private familySelected$ = this.familyInput.valueChanges.pipe(
-    tap(({ key }) => !key ? this.familyInput.setErrors({ required: true }) : this.familyInput.setErrors(null)),
     tap(({ key }) => this.onChange && this.onChange(key)),
     filter(({ value }) => value),
     tap(({ value }) => this.allowPhotographs.emit(value.find((p: any) => p.allowPhotographs !== undefined).allowPhotographs))
@@ -82,7 +76,11 @@ export class FamilySelectComponent implements OnInit, ControlValueAccessor {
   public displayFn = (item: { key: string, value: { type: string, name: string }[]}) => 
     item?.value.reduce((acc, curr) => (acc ? acc + ", " : acc) + curr.name, "");
 
-  constructor() { }
+  constructor(@Optional() @Self() public ngControl: NgControl, private cdr: ChangeDetectorRef) {
+      if (ngControl) {
+          ngControl.valueAccessor = this;
+      }
+  }
 
   ngOnInit(): void {
     merge(
@@ -90,6 +88,16 @@ export class FamilySelectComponent implements OnInit, ControlValueAccessor {
       this.familySelected$,
       this.persons$
     ).pipe(takeUntil(this.onDestroy$)).subscribe();
+
+    if (this.ngControl.control) {
+      this.familyInput.setValidators(this.ngControl.control.validator);
+      this.familyInput.updateValueAndValidity({ emitEvent: false });
+
+      extractTouchedChanges(this.ngControl.control).pipe(takeUntil(this.onDestroy$)).subscribe(() => {
+          this.familyInput.markAsTouched();
+          this.cdr.markForCheck();
+      });
+    }
   }
 
   writeValue(obj: any): void {

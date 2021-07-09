@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Validators, FormControl, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import { merge, Subject } from 'rxjs';
 import { filter, exhaustMap, tap, takeUntil } from 'rxjs/operators';
 import { catchAndContinue } from 'src/app/shared/catch-and-continue';
 import { PersonService } from '../../person/person.service';
@@ -27,12 +27,22 @@ export class StaffCreateComponent implements OnInit {
     )),
     filter(({ isError }) => !isError),
     tap(_ => this.router.navigate(['../'], { relativeTo: this.route }))
-  )
+  );
+
+  private markAsTouched$ = this.saveClicked$.pipe(
+    filter(_ => !this.staffMember.valid || !this.staffMember.valid),
+    tap(_ => { 
+      this.staffMember.markAllAsTouched();
+    })
+  );
 
   constructor(private personService: PersonService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.saveGuardian$.pipe(takeUntil(this.onDestroy$)).subscribe();
+    merge(
+      this.saveGuardian$,
+      this.markAsTouched$
+    ).pipe(takeUntil(this.onDestroy$)).subscribe();
   }
 
   ngOnDestroy(): void {
