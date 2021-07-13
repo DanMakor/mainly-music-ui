@@ -70,9 +70,9 @@ function getDrinkOrderValue(drink: Drink) {
 
     if (drink.type === drinkType.hotChoc) {
         drinkValue = 7;
-    } else if (drink.name.includes("Cappuccino")) {
+    } else if (drink.name?.includes("Cappuccino")) {
         drinkValue = 6;
-    } else if (drink.name.includes("Flat White")) {
+    } else if (drink.name?.includes("Flat White")) {
         drinkValue = 5;
     } else if (drink.type === drinkType.coffee) {
         drinkValue = 4;
