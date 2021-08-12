@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, share, shareReplay, skip, takeUntil, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Child, ChildForCreation } from '../child/child';
-import { FamilyForCreation } from '../family/family';
+import { Family, FamilyForCreation } from '../family/family';
 import { Guardian, GuardianForCreation } from '../guardian/guardian';
 import { Drink } from '../drink/drink';
 import { personType } from './person-type';
@@ -64,6 +64,18 @@ export class PersonService {
       const persons = this.personsSubject$.getValue();
       this.personsSubject$.next(persons.map(p => p._id === person._id ? person : p))
     });
+
+    this.socket.on('personscreated', (personsCreated: (Child | Guardian | Staff)[]) => {
+      var updatedPersons = personsCreated.map((person: Child | Guardian | Staff) => {
+        if (person.type === personType.child) {
+          return { ...person, dateOfBirth: new Date((person as Child).dateOfBirth) } as Child
+        }
+        return person as (Guardian | Staff);
+      })
+      
+      const persons = this.personsSubject$.getValue();
+      this.personsSubject$.next([ ...persons, ...updatedPersons ]);
+    });
     
     this.persons$.pipe(takeUntil(this.onDestroy$)).subscribe();
     this.list().subscribe();
@@ -105,25 +117,25 @@ export class PersonService {
 
   public createChild(child: ChildForCreation, familyId: string) {
     return this.http.post<{ ops: Child[] }>(`${this.url}/createChild`, { ...child, familyId }).pipe(
-      tap((response) => this.personsSubject$.next([...this.personsSubject$.getValue(), ...response.ops]))
+      tap(response => this.socket.emit('personscreated', response.ops))
     )
   }
 
   public createGuardian(child: GuardianForCreation, familyId: string) {
-    return this.http.post<{ ops: Child[] }>(`${this.url}/createGuardian`, { ...child, familyId }).pipe(
-      tap((response) => this.personsSubject$.next([...this.personsSubject$.getValue(), ...response.ops]))
+    return this.http.post<{ ops: Guardian[] }>(`${this.url}/createGuardian`, { ...child, familyId }).pipe(
+      tap(response => this.socket.emit('personscreated', response.ops))
     )
   }
 
   public createStaffMember(staffMember: Staff) {
-    return this.http.post<{ ops: Child[] }>(`${this.url}/createStaffMember`, staffMember).pipe(
-      tap((response) => this.personsSubject$.next([...this.personsSubject$.getValue(), ...response.ops]))
+    return this.http.post<{ ops: Staff[] }>(`${this.url}/createStaffMember`, staffMember).pipe(
+      tap(response => this.socket.emit('personscreated', response.ops))
     )
   }
 
   public createFamily(family: FamilyForCreation) {
     return this.http.post<{ ops: (Child | Guardian)[] }>(`${this.url}/createFamily`, family).pipe(
-      tap((response) => this.personsSubject$.next([...this.personsSubject$.getValue(), ...response.ops]))
+      tap(response => this.socket.emit('personscreated', response.ops))
     );
   }
 
